@@ -53,8 +53,10 @@
                  let status = await  iatRecorder.start();
                  console.log('status',status);
                  $("#status").text(status.data || status.errmsg);
-                 var sound = new Howl({ src: ['res/done.mp3']});
-                 sound.play();
+                 if(!window.Android){ // android app注入对象
+                    var sound = new Howl({ src: ['res/done.mp3']});
+                    sound.play();
+                 }                 
                  sendEvent('vibrate', {time:500})
                 $('#voice-txt').text('');
             });
