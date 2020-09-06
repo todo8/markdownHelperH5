@@ -33,30 +33,30 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/howler/2.2.0/howler.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
     <script>
-        $(function() {          
+        $(  function() {          
             var vConsole = new VConsole();          
             console.log('Hello world');
 
-            $("body").on("touchstart", function(e) {
-               e.preventDefault();
-            });
-            $("body").on("touchend", function(e) {
-               e.preventDefault();
-            });
-            $("body").on("touchmove", function(e) {
-               e.preventDefault();
-            });
+            // $("body").on("touchstart", function(e) {
+            //    e.preventDefault();
+            // });
+            // $("body").on("touchend", function(e) {
+            //    e.preventDefault();
+            // });
+            // $("body").on("touchmove", function(e) {
+            //    e.preventDefault();
+            // });
 
-            $(".fixed-icon").on("touchstart", function(e) {
+            $(".fixed-icon").on("touchstart", async function(e) {
                  console.log('startBtn touchstart')
                  $(".fixed-icon").addClass('fixed-icon-start');
-                 let status =  iatRecorder.start();
+                 let status = await  iatRecorder.start();
                  console.log('status',status);
-                 $("#status").text(status);
+                 $("#status").text(status.data || status.errmsg);
                  var sound = new Howl({ src: ['res/done.mp3']});
                  sound.play();
                  sendEvent('vibrate', {time:500})
-                $('#voice-txt').text('最终内容');
+                $('#voice-txt').text('');
             });
             $(".fixed-icon").on("touchend", function(e) {
                console.log('startBtn touchend')
@@ -102,6 +102,8 @@
                     };
                 }
             });
+            let can = iatRecorder.recorderCheck() ;
+            $("#status").text( !can ? '设备无法录音':'有录音设备' );
          });
 
         window.onload = function () {

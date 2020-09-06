@@ -130,7 +130,7 @@ class IatRecorder {
     };
 
     // 初始化浏览器录音
-    recorderInit() {
+    async recorderInit() {
         // 创建音频环境
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -168,7 +168,7 @@ class IatRecorder {
         };
         // 获取浏览器录音权限失败时回调
         let getMediaFail = (e) => {
-            alert('对不起：录音权限获取失败!');
+            // alert('对不起：录音权限获取失败!');
             this.audioContext && this.audioContext.close();
             this.audioContext = undefined;
             // 关闭websocket
@@ -179,41 +179,39 @@ class IatRecorder {
         };
 
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-        // 获取浏览器录音权限
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                audio: true,
-                video: false
-            }).then(stream => {
-                console.log('mediaDevices.getUserMedia:', 'success' ,stream );
-                getMediaSuccess(stream);
-            }).catch(e => {
-                console.log('mediaDevices.getUserMedia:', 'error' ,e );
-               return  getMediaFail(e);
-            })
-        } else if (navigator.getUserMedia) {
-            navigator.getUserMedia({
-                audio: true,
-                video: false
-            }, (stream) => {
-                console.log('mediaDevices.getUserMedia:', 'success' ,stream );
-                getMediaSuccess(stream);
-            }, function (e) {
-                console.log('mediaDevices.getUserMedia:', 'error' ,e );
-                return getMediaFail(e);
-            })
-        } else {
+        let device ,  res ;
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) device = navigator.mediaDevices ;
+        else if (navigator.getUserMedia) device = navigator ;        
+        console.log('getUserMedia device' , device );
+        if(device) {
+            res = await device.getUserMedia({audio: true,video: false}).catch(e=>{ return {errno:1000,errmsg: '用户未授权'} });
+            if(  res.errno ) {
+                getMediaFail();
+                return res ;
+            }
+            getMediaSuccess(res)
+            console.log('device res' ,res);
+            return {errno:0,errmsg:'',data:'成功'} ;
+        }else {
+            let err ;
             if (navigator.userAgent.toLowerCase().match(/chrome/) && location.origin.indexOf('https://') < 0) {
                 console.error('获取浏览器录音功能，因安全性问题，需要在localhost 或 127.0.0.1 或 https 下才能获取权限！');
+                err = {errno:1000,errmsg:'localhost 或 127.0.0.1 或 https 下才能获取权限！'}
             } else {
-                alert('对不起：未识别到录音设备!');
+                // alert('对不起：未识别到录音设备!');
+                err = {errno:1000,errmsg:'未识别到录音设备'}
             }
             this.audioContext && this.audioContext.close();
-            return false;
+            return err;
         };
-        return true ;
+        return {errno:0,errmsg:'',data:'成功'} ;
     };
+
+    recorderCheck(){
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) return true ;
+        else if (navigator.getUserMedia) return true ;     
+        return false ;
+    }
 
     // 向webSocket发送数据(音频二进制数据经过Base64处理)
     webSocketSend() {
