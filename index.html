@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum=1.0, user-scalable=no shrink-to-fit=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>智能麦克风I</title>
+    <link rel="stylesheet" href="./css/base.css" />
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div><span>状态：<span><span id="status"><span></div>
+    <div><span>内容：<span><span  id="voice-txt"><span></div>
+    <br/>
+    <div id="fixed-txt">Hello! 请说出你想说话。。。！</div>
+    <section class="fixed-box" style="display: block;" id="fixed-box">
+        <div class="fixed-main">
+            <div class="fixed-icon">
+                <img src="./img/voice.png" alt="" />
+            </div>
+        </div>
+    </section>
+
+    <script src="./js/crypto-js.js"></script>
+    <script src="./js/voice.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.touchswipe/1.6.9/jquery.touchSwipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/howler/2.2.0/howler.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
+    <script>
+        $(function() {          
+            var vConsole = new VConsole();          
+            console.log('Hello world');
+
+            $("body").on("touchstart", function(e) {
+               e.preventDefault();
+            });
+            $("body").on("touchend", function(e) {
+               e.preventDefault();
+            });
+            $("body").on("touchmove", function(e) {
+               e.preventDefault();
+            });
+
+            $(".fixed-icon").on("touchstart", function(e) {
+                 console.log('startBtn touchstart')
+                 $(".fixed-icon").addClass('fixed-icon-start');
+                 let status =  iatRecorder.start();
+                 console.log('status',status);
+                 $("#status").text(status);
+                 var sound = new Howl({ src: ['res/done.mp3']});
+                 sound.play();
+                 sendEvent('vibrate', {time:500})
+                $('#voice-txt').text('最终内容');
+            });
+            $(".fixed-icon").on("touchend", function(e) {
+               console.log('startBtn touchend')
+                $(".fixed-icon").removeClass('fixed-icon-start');
+                iatRecorder.stop();
+                 sendEvent('vibrate', {time:200})
+            });
+
+            const voiceTxt = document.querySelector('#voice-txt');
+            // const fixedBox = document.querySelector('#fixed-box');
+            const fixedTxt = document.querySelector('#fixed-txt');
+
+            const startBtn = document.querySelector('.fixed-icon');
+            // fixedBox.style.display = 'block';
+            let fiveTell = null;
+
+            // 实例化迅飞语音听写（流式版）WebAPI
+            const iatRecorder = new IatRecorder({
+
+                // 服务接口认证信息 注：apiKey 和 apiSecret 的长度都差不多，请要填错哦！
+                appId: '5af63ec2',
+                apiKey: 'de388b73b3e3dec7294639029bb489b4',
+                apiSecret: '8a29210db51e753293d2251bf9c36e8d',
+                // 注：要获取以上3个参数，请到迅飞开放平台：https://www.xfyun.cn/services/voicedictation
+
+                onWillStatusChange: function (oldStatus, newStatus) {
+                    //可以在这里进行页面中一些交互逻辑处理：注：倒计时（语音听写只有60s）,录音的动画，按钮交互等！
+                    // fixedBox.style.display = 'block';
+                },
+                onTextChange: function (text) {
+                    //监听识别结果的变化
+                    voiceTxt.value = text;
+                    fixedTxt.innerText = text;
+                    sendText(text)
+
+                    // 3秒钟内没有说话，就自动关闭
+                    if (text) {
+                        clearTimeout(fiveTell);
+                        fiveTell = setTimeout(function () {
+                            iatRecorder.stop();
+                            // fixedBox.style.display = 'none';
+                        }, 3000);
+                    };
+                }
+            });
+         });
+
+        window.onload = function () {
+
+        };
+        async function sendText(text){
+            if(!text || !text.trim().length ) return ;
+            $('#voice-txt').text(text);
+            // let url = 'http://zhihu.5gzvip.idcfengye.com/index/test' ; //win10系统，
+            // let url = 'http://zhihu.5gzvip.idcfengye.com/test/input' ; //win7
+            let url = 'http://192.168.1.102:8360/test/input' ; //win7
+            let res = await axios.get(`${url}?str=${text}`).then(d=>d.data) ;
+            console.log('sendText',text , res);
+        }
+
+      // android调用js
+      function dispatchEvent(eventName, data) {
+        // alert('dispatchEvent:' + eventName);
+      }
+
+      // 调用android中的逻辑.
+      function sendEvent(eventName, data) {
+        try {
+           if(  typeof data == 'object' ) data = JSON.stringify(data);
+           window.Android && window.Android.invoke('sendEvent', eventName, data); //
+        } catch (e) {
+           // alert('dispatchEvent error:' + e.message);
+           console.log('dispatchEvent error', e)
+        }
+      }
+    </script>
+</body>
+
+</html>
