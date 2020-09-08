@@ -81,7 +81,7 @@
           }//摇杆主体需要缩放的比例，默认x、y都是1
           , buttons: [
             {
-                button_name: "left"
+                button_name: "leftBtn"
               , normal_texture: "/img/left.png"
               , pressed_texture: "/img/left.png"
               , x: 86 - 181
@@ -89,7 +89,7 @@
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
-                button_name: "right"
+                button_name: "rightBtn"
               , normal_texture: "/img/right.png"
               , pressed_texture: "/img/right.png"
               , x: 274 - 180
@@ -97,7 +97,7 @@
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
-                button_name: "up"
+                button_name: "upBtn"
               , normal_texture: "/img/up.png"
               , pressed_texture: "/img/up.png"
               , x: 178 - 180
@@ -105,7 +105,7 @@
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
-                button_name: "down"
+                button_name: "downBtn"
               , normal_texture: "/img/down.png"
               , pressed_texture: "/img/down.png"
               , x: 179 - 180
@@ -364,6 +364,7 @@
         button.anchor.set(0.5);
         button.position.x = buttonItemInfo.x;
         button.position.y = buttonItemInfo.y;
+        button.button_name = buttonItemInfo.button_name ;
 
         button.interactive = true;
         if (buttonItemInfo.scale) {
@@ -384,7 +385,7 @@
                 return;
             }
             this.isdown = false;
-            console.log( textureButton ) ;
+            console.log( 'onButtonUp', button.button_name , button ) ;
 
             if (this.isOver) {
                 this.texture = textureButtonOver;
