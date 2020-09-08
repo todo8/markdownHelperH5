@@ -18,14 +18,14 @@
     <style>
         body { padding: 0; margin: 0; }
         .body-main { margin:0; padding-bottom: 0; }
-        .voice-txt { z-index: 10 ; position: absolute; width:96%; }
+        .voice-txt { z-index: 10 ; position: absolute; width:96%; background-color: #ffffff; }
         input:-moz-placeholder, textarea:-moz-placeholder { color: #636363; }
         /*#game { background-color: rgba(0, 0, 0, 0.9); }
         #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
     </style>
    
     <div class="body-main">            
-    <textarea class="voice-txt" rows="2" placeholder='语音自动识别'></textarea>
+    <div class="voice-txt" type="text"  contenteditable="true"></div>
         <div id="game" style=""></div>
     </div>
     
@@ -34,6 +34,8 @@
 <script src="/js/migrate.js"></script>
 <script src="/js/Box2dWeb-2.1.a.3.min.js"></script>
 <script src="/js/pixi.min.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/howler.min.js"></script>
 
 <script>
     var GameOption ;
@@ -459,9 +461,17 @@
                   _showMsg("点击的按钮名称是：" + button_name);
               },
               onJoyStickEnd:function (now_stick_angle,dis ,now_stick_postion) {
-                  console.log('onJoyStickEnd',now_stick_angle,dis) // ,now_stick_postion
+                sendEvent('vibrate', {time:200})
+                sendText( $('.voice-txt').val() || $('.voice-txt').text())
+                console.log('onJoyStickEnd',now_stick_angle,dis) // ,now_stick_postion
               },
               onJoyStickStart:function (event) {
+                 if(!window.Android){ // android app注入对象
+                    var sound = new Howl({ src: ['res/done.mp3']});
+                    sound.play();
+                 }
+                sendEvent('vibrate', {time:100})
+                // $('.voice-txt').val('');
                   console.log('onJoyStickStart', event ) // ,now_stick_postion
               },
         });
@@ -503,9 +513,14 @@
         let url = `http://${baseUrl}/text/input` ; //win10
         async function sendText(text){
             if(!text || !text.trim().length ) return ;
-            $('#voice-txt').text(text);
+            // $('.voice-txt').val('');
+            // $('.voice-txt').attr("value",'');
+            // $('.voice-txt').val(text);
+            $('.voice-txt').text('');
             // let url = 'http://192.168.1.102:8360/test/input' ; //win7
             let res = await axios.get(`${url}?str=${text}`).then(d=>d.data).catch(e=>{}) ;
+            if(!res) sendEvent('toast',{msg:'发送失败'}),new Howl({ src: ['res/fail.wav']}).play();
+            else new Howl({ src: ['res/done.mp3']}).play();                    
             console.log('sendText',text , res);
         }
 
