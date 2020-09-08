@@ -11,13 +11,8 @@
     <meta content="telephone=no" name="format-detection">
     <meta content="email=no" name="format-detection"> 
     <meta name="format-detection" content="telephone=no">
-    
     <title>摇杆</title>
     
-
-
-    
-
 </head>
 <body>      
     <style>
@@ -30,9 +25,7 @@
     </style>
    
     <div class="body-main">            
-    <textarea class="say" rows="5" placeholder='语音自动识别'>
-
-    </textarea>
+    <textarea class="say" rows="2" placeholder='语音自动识别'></textarea>
         <div id="game" style=""></div>
     </div>
     
@@ -45,8 +38,11 @@
 <script>
     var GameOption ;
     $(function() {   
+       $(".say").focus(); 
+
         var width = $(window).width(); 
         var height = $(window).height(); 
+        var offsetY = 116 ;
         GameOptions = {
             width: width  // 800 //游戏屏幕的高度。 
           , height: height //  600 //游戏屏幕的宽度。
@@ -69,7 +65,7 @@
           , joy_pad_joystick: "/img/Button_active.png" //摇杆正体。
             // , joy_pad_joystick: "/img/RadialJoy_Area.png" //摇杆正体。
           , joy_pad_x: 180 //摇杆的坐标
-          , joy_pad_y: 280 //摇杆的y坐标  
+          , joy_pad_y: 280 - offsetY //摇杆的y坐标  
             //--注意，所有缩放的尺寸都是按照unitiy3d获得的这些摇杆素材来设置的，假如替换了texture，请重新设置缩放尺寸。
           , joy_pad_background_scale: {
               x: 0.5
@@ -482,7 +478,7 @@
     richText.x = 0;
     richText.y = 0;
 
-    game_stage.addChild(richText);
+    // game_stage.addChild(richText);
     function game_animate() {
 
         requestAnimationFrame(game_animate);
