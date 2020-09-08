@@ -18,14 +18,14 @@
     <style>
         body { padding: 0; margin: 0; }
         .body-main { margin:0; padding-bottom: 0; }
-        .voice-txt { z-index: 10 ; position: absolute; width:96%; background-color: #ffffff; }
+        .voice-txt { z-index: 10 ; position: absolute; width:96%; }
         input:-moz-placeholder, textarea:-moz-placeholder { color: #636363; }
         /*#game { background-color: rgba(0, 0, 0, 0.9); }
         #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
     </style>
    
     <div class="body-main">            
-    <div class="voice-txt" type="text"  contenteditable="true"></div>
+    <input class="voice-txt" type="text" ></input>
         <div id="game" style=""></div>
     </div>
     
@@ -462,7 +462,7 @@
               },
               onJoyStickEnd:function (now_stick_angle,dis ,now_stick_postion) {
                 sendEvent('vibrate', {time:200})
-                sendText( $('.voice-txt').val() || $('.voice-txt').text())
+                sendText( $('.voice-txt').val() )
                 console.log('onJoyStickEnd',now_stick_angle,dis) // ,now_stick_postion
               },
               onJoyStickStart:function (event) {
@@ -513,10 +513,7 @@
         let url = `http://${baseUrl}/text/input` ; //win10
         async function sendText(text){
             if(!text || !text.trim().length ) return ;
-            // $('.voice-txt').val('');
-            // $('.voice-txt').attr("value",'');
-            // $('.voice-txt').val(text);
-            $('.voice-txt').text('');
+            $('.voice-txt').val('');
             // let url = 'http://192.168.1.102:8360/test/input' ; //win7
             let res = await axios.get(`${url}?str=${text}`).then(d=>d.data).catch(e=>{}) ;
             if(!res) sendEvent('toast',{msg:'发送失败'}),new Howl({ src: ['res/fail.wav']}).play();
