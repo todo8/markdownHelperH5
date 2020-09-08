@@ -19,54 +19,53 @@
     
 
 </head>
-<body>
+<body>      
+    <style>
+        body { padding: 0; margin: 0; }
+        .body-main { margin:0; padding-bottom: 0; }
+        .say { z-index: 10 ; position: absolute; width:96%; }
+        input:-moz-placeholder, textarea:-moz-placeholder { color: #636363; }
+        /*#game { background-color: rgba(0, 0, 0, 0.9); }
+        #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
+    </style>
    
-    <div class="body-main">
-        
-<style>
-    body { padding: 0; margin: 0; }
-    .body-main { margin:0;}
-    /*#game { background-color: rgba(0, 0, 0, 0.9); }
-    #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
-</style>
+    <div class="body-main">            
+    <textarea class="say" rows="5" placeholder='语音自动识别'>
 
-<div id="game" style=""></div>
-
-
-
-        <style>
-            .body-main { padding-bottom: 0; }
-        </style>
-
+    </textarea>
+        <div id="game" style=""></div>
+    </div>
     
     
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/js/migrate.js"></script>
 <script src="/js/Box2dWeb-2.1.a.3.min.js"></script>
 <script src="/js/pixi.min.js"></script>
-<script>
-    var GameOptions = {
-        width: 800 //游戏屏幕的高度。 
-      , height: 600 //游戏屏幕的宽度。
-      , ground_y: 400 - 65 //地面y坐标
-      , fps: 10
-      , actorWidth: 57 * 2 * 0.8
-      , actorHeight: 61 * 2 * 0.8
 
-        //--hero的行走向量速度。
-      , hero_run_x_speed: 15
-      , hero_run_y_speed: 30 //hero跳跃时候向上的速度。
-
-    };
-</script>
 <script>
+    var GameOption ;
+    $(function() {   
+        var width = $(window).width(); 
+        var height = $(window).height(); 
+        GameOptions = {
+            width: width  // 800 //游戏屏幕的高度。 
+          , height: height //  600 //游戏屏幕的宽度。
+          , ground_y: 400 - 65 //地面y坐标
+          , fps: 10
+          , actorWidth: 57 * 2 * 0.8
+          , actorHeight: 61 * 2 * 0.8
+
+            //--hero的行走向量速度。
+          , hero_run_x_speed: 15
+          , hero_run_y_speed: 30 //hero跳跃时候向上的速度。
+        };
 
     //--虚拟手柄控件。
     function GameJoyPad(parent_container, _opts) {
         var me = this;
         this.settings = {
             //joy_pad_background: "/img/Button_normal.png"//摇杆的背景。
-            joy_pad_background: "/img/RadialJoy_Area.png"//摇杆的背景。
+            joy_pad_background: "/img/joy_bg1.png"//摇杆的背景。
           , joy_pad_joystick: "/img/Button_active.png" //摇杆正体。
             // , joy_pad_joystick: "/img/RadialJoy_Area.png" //摇杆正体。
           , joy_pad_x: 180 //摇杆的坐标
@@ -82,27 +81,35 @@
           }//摇杆主体需要缩放的比例，默认x、y都是1
           , buttons: [
             {
-                button_name: "shoot"
-              , normal_texture: "/img/jiang.png"
-              , pressed_texture: "/img/jiang.png"
-              , x: 300
-              , y: 250
+                button_name: "left"
+              , normal_texture: "/img/left.png"
+              , pressed_texture: "/img/left.png"
+              , x: 86
+              , y: 280
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
-                button_name: "gun"
-              , normal_texture: "/img/jiang.png"
-              , pressed_texture: "/img/jiang.png"
-              , x: 400
-              , y: 250
+                button_name: "right"
+              , normal_texture: "/img/right.png"
+              , pressed_texture: "/img/right.png"
+              , x: 274
+              , y: 280
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
-                button_name: "blank"
-              , normal_texture: "/img/jiang.png"
-              , pressed_texture: "/img/jiang.png"
-              , x: 500
-              , y: 250
+                button_name: "up"
+              , normal_texture: "/img/up.png"
+              , pressed_texture: "/img/up.png"
+              , x: 179
+              , y: 187
+              , scale: { x: 0.4, y: 0.4 }
+            }
+            , {
+                button_name: "down"
+              , normal_texture: "/img/down.png"
+              , pressed_texture: "/img/down.png"
+              , x: 600
+              , y: 350
               , scale: { x: 0.4, y: 0.4 }
             }
           ] //虚拟手柄的其他按钮。
@@ -135,12 +142,12 @@
         //--好了，加载相关资源
         me.__loadResources(function () {
             me.__init_stick();
+            //--新建按钮。
+            // for (var i = 0; i < me.settings.buttons.length; i++) {
+            //     var buttonItemInfo = me.settings.buttons[i];
+            //     me.__createButton(buttonItemInfo);
+            // }            
         });
-        //--新建按钮。
-        for (var i = 0; i < me.settings.buttons.length; i++) {
-            var buttonItemInfo = me.settings.buttons[i];
-            me.__createButton(buttonItemInfo);
-        }
     }
     GameJoyPad.prototype.__loadResources = function (callback) {
         var me = this;
@@ -168,6 +175,10 @@
         this.joy_pad_joystick.anchor = { x: 0.5, y: 0.5 };
         this.joy_pad_container.anchor = { x: 0.5, y: 0.5 };
         this.joy_pad_container.addChild(this.joy_pad_background);
+        for (var i = 0; i < this.settings.buttons.length; i++) {
+            var buttonItemInfo = this.settings.buttons[i];
+            this.__createButton(buttonItemInfo);
+        }     
         this.joy_pad_container.addChild(this.joy_pad_joystick);
         this.joy_pad_radius = this.joy_pad_container.width / 2;
         this.joy_pad_stickRadius = this.joy_pad_joystick.width / 2;
@@ -205,8 +216,8 @@
             window.end_event = event;            
 
             var newPosition = _event_data.getLocalPosition(this.parent);
-            let { _stick_angle,_center_point } = calc_angle_distance(newPosition);
-            me.settings.onJoyStickEnd(_stick_angle,me.joy_pad_joystick.position);
+            let { _stick_angle , dis ,_center_point } = calc_angle_distance(newPosition);
+            me.settings.onJoyStickEnd(_stick_angle,dis ,me.joy_pad_joystick.position);
             me.joy_pad_joystick.position = {x: 0 , y: 0};
         }
         function onDragMove(event) {
@@ -214,18 +225,21 @@
             if (_on_drag == false) return;
 
             var newPosition = _event_data.getLocalPosition(this.parent);
-            let { _stick_angle,_center_point } = calc_angle_distance(newPosition);
+            let { _stick_angle, dis , _center_point } = calc_angle_distance(newPosition);
             if( _stick_angle == null ) return ;
 
             me.joy_pad_joystick.position = _center_point;
-            me.settings.onJoyStickMove(_stick_angle,_center_point);
+            me.settings.onJoyStickMove(_stick_angle,dis ,_center_point);
         };
         function calc_angle_distance(newPosition) {
             var _side_length_y = newPosition.y - me.settings.joy_pad_y;
             var _side_length_x = newPosition.x - me.settings.joy_pad_x;
             if (_side_length_x == 0 && _side_length_y == 0)  return {} ;
+            _side_length_y = Math.ceil(_side_length_y) , _side_length_x = Math.ceil(_side_length_x) ;
 
             var _center_point = {x: 0 , y: 0};//--中心点。
+            var dis = Math.sqrt(Math.pow(_side_length_y,2)+Math.pow(_side_length_x,2));
+            dis = Math.ceil(dis);
 
             var _stick_angle = 0; //当前摇杆的角度
 
@@ -257,10 +271,10 @@
                     };
                     _stick_angle = 90;//901度
                 }
-
+                _stick_angle = Math.ceil(_stick_angle);
                 // me.joy_pad_joystick.position = _center_point;
                 // me.settings.onJoyStickMove(_stick_angle,_center_point);
-                return { _stick_angle,_center_point } ;
+                return { _stick_angle, dis ,_center_point } ;
             }
             else if (_side_length_y == 0) {
                 if (_side_length_x > 0) {
@@ -277,9 +291,10 @@
                     };
                     _stick_angle = 180;//180度
                 }
+                _stick_angle = Math.ceil(_stick_angle);
                 // me.joy_pad_joystick.position = _center_point;
                 // me.settings.onJoyStickMove(_stick_angle,_center_point);
-                return { _stick_angle,_center_point } ;
+                return { _stick_angle, dis ,_center_point } ;
             }
             var _tan_val = Math.abs(_side_length_y / _side_length_x);
             var _radian = Math.atan(_tan_val);
@@ -321,7 +336,8 @@
                 x: _center_x
               , y: _center_y
             };
-           return { _stick_angle,_center_point } ;
+                _stick_angle = Math.ceil(_stick_angle);
+           return { _stick_angle, dis ,_center_point } ;
         }
 
         // events for drag start
@@ -368,6 +384,7 @@
                 return;
             }
             this.isdown = false;
+            console.log( textureButton ) ;
 
             if (this.isOver) {
                 this.texture = textureButtonOver;
@@ -422,28 +439,29 @@
         };
         button.tap = noop;
         button.click = noop;
-        this.parent_container.addChild(button);
+        // this.parent_container.addChild(button);
+        this.joy_pad_container.addChild(button);
 
         return button;
     }
-</script>
-<script>
+
+
     var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height, { backgroundColor: 0x1099bb,transparent:!1 });
     //var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height);
     var game_stage = new PIXI.Container(0x66FF99);
     $("#game").append(game_renderer.view);
     var _joy_pad = new GameJoyPad(game_stage, {
         //--摇杆摇动角度变换时候的回调函数。
-        onJoyStickMove: function (now_stick_angle,now_stick_postion) {
-            console.log('position:',now_stick_postion);
+        onJoyStickMove: function (now_stick_angle, dis ,now_stick_postion) {
+            console.log('position:', dis , now_stick_postion);
             _showMsg("摇杆角度为：" + now_stick_angle);
         }
         //--点击了控制按钮的回调事件。
           , onButtonClick: function (event, button_name) {
               _showMsg("点击的按钮名称是：" + button_name);
           },
-          onJoyStickEnd:function (now_stick_angle,now_stick_postion) {
-              console.log('onJoyStickEnd',now_stick_angle,now_stick_postion)
+          onJoyStickEnd:function (now_stick_angle,dis ,now_stick_postion) {
+              console.log('onJoyStickEnd',now_stick_angle,dis) // ,now_stick_postion
           }
     });
     var style = {
@@ -471,8 +489,7 @@
     }
     requestAnimationFrame(game_animate);
 
-</script>
-<script>
+
     function _debug(msg) {
         var _str = richText.text;
         richText.text = _str + "\n" + msg;
@@ -480,6 +497,9 @@
     function _showMsg(msg) {
         richText.text = msg;
     }
+
+    })
+
 </script>
 
     
