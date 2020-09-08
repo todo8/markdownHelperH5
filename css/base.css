@@ -57,6 +57,11 @@
     left      : 0px;
     border    : .04rem solid #e0e7ff;
     background: rgba(16, 22, 62, .2);
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -webkit-user-select:none;  
+    -o-user-select:none;  
+    user-select:none;  
 }
 
 .fixed-close {
@@ -111,32 +116,15 @@
     border         : 1px solid #e0e7ff;
     border-radius  : 50%;
 }
-/*
-.fixed-icon::before {
-    content      : "";
-    position     : absolute;
-    display      : inline-block;
-    width        : 100px;
-    height       : 100px;
-    border       : 1px solid #9f01ea;
-    box-shadow   : 0px 0px 6px 0px #9f01ea;
-    border-radius: 50%;
-    animation    : move 1.5s infinite;
+
+*{
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-khtml-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
 }
-
-.fixed-icon::after {
-    content      : "";
-    position     : absolute;
-    display      : inline-block;
-    width        : 100px;
-    height       : 100px;
-    border       : 1px solid #56d8e4;
-    box-shadow   : 0px 0px 6px 0px #56d8e4;
-    border-radius: 50%;
-    animation    : move 1.5s .5s infinite;
-}*/
-
-
 .fixed-icon-start::before {
     content      : "";
     position     : absolute;
@@ -165,6 +153,7 @@
 .fixed-icon img {
     width : 30px;
     height: 50px;
+    pointer-events: none;
 }
 
 @keyframes move {

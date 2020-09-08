@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum=1.0, user-scalable=no shrink-to-fit=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>智能麦克风I</title>
+    <title>智能麦克风</title>
     <link rel="stylesheet" href="./css/base.css" />
     <style type="text/css">
 
@@ -16,7 +16,7 @@
     <div><span>状态：<span><span id="status"><span></div>
     <div><span>内容：<span><span  id="voice-txt"><span></div>
     <br/>
-    <div id="fixed-txt">Hello! 请说出你想说话。。。！</div>
+    <div><span>临时：<span><span  id="fixed-txt"><span>Hello! 请说出你想说话。。。！</div>
     <section class="fixed-box" style="display: block;" id="fixed-box">
         <div class="fixed-main">
             <div class="fixed-icon">
@@ -27,15 +27,22 @@
 
     <script src="./js/crypto-js.js"></script>
     <script src="./js/voice.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.touchswipe/1.6.9/jquery.touchSwipe.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/howler/2.2.0/howler.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/jquery.slim.min.js"></script>
+    <script src="./js/jquery.touchSwipe.min.js"></script>
+    <script src="./js/howler.min.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script> -->
     <script>
-        $(  function() {          
-            var vConsole = new VConsole();          
-            console.log('Hello world');
+        $(  function() {         
+            window.ontouchstart = function(e) { 
+                e.preventDefault(); 
+            }; 
+            window.addEventListener('contextmenu', function(e){
+              e.preventDefault();
+            });
+
+            // var vConsole = new VConsole();          
+            // console.log('Hello world');
 
             // $("body").on("touchstart", function(e) {
             //    e.preventDefault();
@@ -57,17 +64,20 @@
                     var sound = new Howl({ src: ['res/done.mp3']});
                     sound.play();
                  }                 
-                 sendEvent('vibrate', {time:500})
+                sendEvent('vibrate', {time:500})
                 $('#voice-txt').text('');
             });
-            $(".fixed-icon").on("touchend", function(e) {
-               console.log('startBtn touchend')
+            $(".fixed-icon").on("touchend", async function(e) {
+                console.log('startBtn touchend', new Date().getTime() ,  $('#fixed-txt').text().length )
                 $(".fixed-icon").removeClass('fixed-icon-start');
-                iatRecorder.stop();
                  sendEvent('vibrate', {time:200})
+                 await iatRecorder.stop();
+                 $('#voice-txt').text(  $('#fixed-txt').text() );
+                 sendText( $('#fixed-txt').text() )
+                 console.log('iatRecorder.stop', new Date().getTime() ,  $('#fixed-txt').text().length)
             });
 
-            const voiceTxt = document.querySelector('#voice-txt');
+            // const voiceTxt = document.querySelector('#voice-txt');
             // const fixedBox = document.querySelector('#fixed-box');
             const fixedTxt = document.querySelector('#fixed-txt');
 
@@ -90,9 +100,9 @@
                 },
                 onTextChange: function (text) {
                     //监听识别结果的变化
-                    voiceTxt.value = text;
                     fixedTxt.innerText = text;
-                    sendText(text)
+                    // voiceTxt.value = text;
+                    // sendText(text)
 
                     // 3秒钟内没有说话，就自动关闭
                     if (text) {
@@ -108,16 +118,13 @@
             $("#status").text( !can ? '设备无法录音':'有录音设备' );
          });
 
-        window.onload = function () {
-
-        };
+        let baseUrl = '192.168.1.105:8375' ;
+        let url = `http://${baseUrl}/text/input` ; //win10
         async function sendText(text){
             if(!text || !text.trim().length ) return ;
             $('#voice-txt').text(text);
-            // let url = 'http://zhihu.5gzvip.idcfengye.com/index/test' ; //win10系统，
-            // let url = 'http://zhihu.5gzvip.idcfengye.com/test/input' ; //win7
-            let url = 'http://192.168.1.102:8360/test/input' ; //win7
-            let res = await axios.get(`${url}?str=${text}`).then(d=>d.data) ;
+            // let url = 'http://192.168.1.102:8360/test/input' ; //win7
+            let res = await axios.get(`${url}?str=${text}`).then(d=>d.data).catch(e=>{}) ;
             console.log('sendText',text , res);
         }
 

@@ -327,13 +327,20 @@ class IatRecorder {
     };
 
     // 暂停录音
-    recorderStop() {
+    async recorderStop(delay) {
         if (!(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgen))) {
 
             // safari下suspend后再次resume录音内容将是空白，设置safari下不做suspend
             this.audioContext && this.audioContext.suspend();
         }
         this.setStatus('end');
+        // setTimeout(()=> { this.setStatus('end') }, delay || 1500);
+        // await this.sleep( delay || 1500 ) ; //执行失败
+    };
+    async sleep (timeountMS) {
+        return await  new Promise((resolve) => {
+          setTimeout(resolve, timeountMS);
+        })
     };
 
     // 开始
