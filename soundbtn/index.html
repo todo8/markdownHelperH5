@@ -65,7 +65,7 @@
         var me = this;
         this.settings = {
             //joy_pad_background: "/img/Button_normal.png"//摇杆的背景。
-            joy_pad_background: "/img/joy_bg1.png"//摇杆的背景。
+            joy_pad_background: "/img/joy_bg.png"//摇杆的背景。
           , joy_pad_joystick: "/img/Button_active.png" //摇杆正体。
             // , joy_pad_joystick: "/img/RadialJoy_Area.png" //摇杆正体。
           , joy_pad_x: 180 //摇杆的坐标
@@ -84,32 +84,32 @@
                 button_name: "left"
               , normal_texture: "/img/left.png"
               , pressed_texture: "/img/left.png"
-              , x: 86
-              , y: 280
+              , x: 86 - 181
+              , y: 280 - 280
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
                 button_name: "right"
               , normal_texture: "/img/right.png"
               , pressed_texture: "/img/right.png"
-              , x: 274
-              , y: 280
+              , x: 274 - 180
+              , y: 280 - 280
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
                 button_name: "up"
               , normal_texture: "/img/up.png"
               , pressed_texture: "/img/up.png"
-              , x: 179
-              , y: 187
+              , x: 178 - 180
+              , y: 187 - 280
               , scale: { x: 0.4, y: 0.4 }
             }
             , {
                 button_name: "down"
               , normal_texture: "/img/down.png"
               , pressed_texture: "/img/down.png"
-              , x: 600
-              , y: 350
+              , x: 179 - 180
+              , y: 374 - 280
               , scale: { x: 0.4, y: 0.4 }
             }
           ] //虚拟手柄的其他按钮。
