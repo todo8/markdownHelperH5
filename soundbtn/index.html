@@ -31,11 +31,11 @@
     
     
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/js/migrate.js"></script>
-<script src="/js/Box2dWeb-2.1.a.3.min.js"></script>
-<script src="/js/pixi.min.js"></script>
-    <script src="./js/axios.min.js"></script>
-    <script src="./js/howler.min.js"></script>
+<script src="js/migrate.js"></script>
+<script src="js/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="js/pixi.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/howler.min.js"></script>
 
 <script>
     var GameOption ;
@@ -62,10 +62,10 @@
         function GameJoyPad(parent_container, _opts) {
             var me = this;
             this.settings = {
-                //joy_pad_background: "/img/Button_normal.png"//摇杆的背景。
-                joy_pad_background: "/img/joy_bg.png"//摇杆的背景。
-              , joy_pad_joystick: "/img/Button_active.png" //摇杆正体。
-                // , joy_pad_joystick: "/img/RadialJoy_Area.png" //摇杆正体。
+                //joy_pad_background: "img/Button_normal.png"//摇杆的背景。
+                joy_pad_background: "img/joy_bg.png"//摇杆的背景。
+              , joy_pad_joystick: "img/Button_active.png" //摇杆正体。
+                // , joy_pad_joystick: "img/RadialJoy_Area.png" //摇杆正体。
               , joy_pad_x: 180 //摇杆的坐标
               , joy_pad_y: 280 - offsetY //摇杆的y坐标  
                 //--注意，所有缩放的尺寸都是按照unitiy3d获得的这些摇杆素材来设置的，假如替换了texture，请重新设置缩放尺寸。
@@ -80,32 +80,32 @@
               , buttons: [
                 {
                     button_name: "leftBtn"
-                  , normal_texture: "/img/left.png"
-                  , pressed_texture: "/img/left.png"
+                  , normal_texture: "img/left.png"
+                  , pressed_texture: "img/left.png"
                   , x: 86 - 181
                   , y: 280 - 280
                   , scale: { x: 0.4, y: 0.4 }
                 }
                 , {
                     button_name: "rightBtn"
-                  , normal_texture: "/img/right.png"
-                  , pressed_texture: "/img/right.png"
+                  , normal_texture: "img/right.png"
+                  , pressed_texture: "img/right.png"
                   , x: 274 - 180
                   , y: 280 - 280
                   , scale: { x: 0.4, y: 0.4 }
                 }
                 , {
                     button_name: "upBtn"
-                  , normal_texture: "/img/up.png"
-                  , pressed_texture: "/img/up.png"
+                  , normal_texture: "img/up.png"
+                  , pressed_texture: "img/up.png"
                   , x: 178 - 180
                   , y: 187 - 280
                   , scale: { x: 0.4, y: 0.4 }
                 }
                 , {
                     button_name: "downBtn"
-                  , normal_texture: "/img/down.png"
-                  , pressed_texture: "/img/down.png"
+                  , normal_texture: "img/down.png"
+                  , pressed_texture: "img/down.png"
                   , x: 179 - 180
                   , y: 374 - 280
                   , scale: { x: 0.4, y: 0.4 }
@@ -384,14 +384,21 @@
                     return;
                 }
                 this.isdown = false;
-                console.log( 'onButtonUp', button.button_name , button ) ;
-
                 if (this.isOver) {
                     this.texture = textureButtonOver;
                 }
                 else {
                     this.texture = textureButton;
                 }
+                console.log( 'onButtonUp', button.button_name , button ) ;
+                if( button.button_name == 'downBtn')  sendText({doEnter:true});
+                else if( button.button_name == 'leftBtn')  sendText({ text: `\n## ` + $('.voice-txt').val()  });
+                else if( button.button_name == 'rightBtn' )  sendText({text: `\n### ` + $('.voice-txt').val()  });
+                else if( button.button_name == 'upBtn')  {
+                    // 如果当前输入框里面没有内容，那就删除电脑上的字符
+                    if( !$('.voice-txt').val().length ) sendText({doDelete:true}) 
+                    else deleteInputStr();
+                }               
             }
 
             function onButtonOver() {
@@ -461,8 +468,8 @@
                   _showMsg("点击的按钮名称是：" + button_name);
               },
               onJoyStickEnd:function (now_stick_angle,dis ,now_stick_postion) {
-                sendEvent('vibrate', {time:200})
-                sendText( $('.voice-txt').val() )
+                if( $('.voice-txt').val().length ) sendEvent('vibrate', {time:100})
+                sendText( { text : $('.voice-txt').val() } )
                 console.log('onJoyStickEnd',now_stick_angle,dis) // ,now_stick_postion
               },
               onJoyStickStart:function (event) {
@@ -508,17 +515,26 @@
         function _showMsg(msg) {
             richText.text = msg;
         }
-
         let baseUrl = '192.168.1.105:8375' ;
         let url = `http://${baseUrl}/text/input` ; //win10
-        async function sendText(text){
-            if(!text || !text.trim().length ) return ;
-            $('.voice-txt').val('');
+        async function sendText({ text , doEnter , doDelete}={}){
+            if( (!text  || !text.length ) &&  !doEnter &&  !doDelete ) return ;
+            if( text ) $('.voice-txt').val('');
             // let url = 'http://192.168.1.102:8360/test/input' ; //win7
-            let res = await axios.get(`${url}?str=${text}`).then(d=>d.data).catch(e=>{}) ;
-            if(!res) sendEvent('toast',{msg:'发送失败'}),new Howl({ src: ['res/fail.wav']}).play();
-            else new Howl({ src: ['res/done.mp3']}).play();                    
+            let res = await axios.get( url , { params : { text , doEnter , doDelete } }).then(d=>d.data).catch(e=>{}) ;
+            if(!res) new Howl({ src: ['res/fail.wav']}).play();
+            else sendEvent('vibrate', {time:100})
             console.log('sendText',text , res);
+        }
+        function deleteInputStr() {
+            let result , temp = $('.voice-txt').val();
+            temp = temp.substr( 0 , temp.length -2 ); // 最后1个字符通常都是，或。，避免只删除1个字符。
+            let lastIndex ,  indexLastComma , indexLastEnd ;
+            indexLastComma = temp.lastIndexOf('，'),indexLastEnd = temp.lastIndexOf('。');
+            lastIndex = Math.max(  indexLastComma , indexLastEnd  ) ;
+            if( lastIndex ) result = temp.substr( 0 , lastIndex+1 ) ;
+            else result = '' ;
+            $('.voice-txt').val( result ) 
         }
 
       // android调用js
@@ -530,7 +546,8 @@
       function sendEvent(eventName, data) {
         try {
            if(  typeof data == 'object' ) data = JSON.stringify(data);
-           window.Android && window.Android.invoke('sendEvent', eventName, data); //
+           if( window.Android  ) window.Android.invoke('sendEvent', eventName, data); //
+           else new Howl({ src: ['res/done.mp3']}).play();
         } catch (e) {
            // alert('dispatchEvent error:' + e.message);
            console.log('dispatchEvent error', e)
