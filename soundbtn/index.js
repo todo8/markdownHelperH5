@@ -371,10 +371,8 @@ $(function () {
             else if (button.button_name == 'leftBtn') sendText({ text: `\n## ` + $('.voice-txt').val() });
             else if (button.button_name == 'rightBtn') sendText({ text: `\n### ` + $('.voice-txt').val() });
             else if (button.button_name == 'upBtn') {
-                // event.preventDefault()
-                // 如果当前输入框里面没有内容，那就删除电脑上的字符
-                if (!$('.voice-txt').val().length) sendText({ doDelete: true })
-                else deleteInputStr();
+                if ( $('.voice-txt').val().length) deleteInputStr();
+                else sendText({ doDelete: 1 }) // 如果当前输入框里面没有内容，那就删除电脑上的字符
             }
         }
 
