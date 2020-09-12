@@ -1,13 +1,28 @@
 var GameOption;
-$(function () {
-    $(".voice-txt").focus();
 
-    var width = $(window).width();
-    var height = $(window).height();
+let baseUrl = '192.168.1.105:8088';
+let url = `http://${baseUrl}/text/input`; //win10
+let lastText , widthWindow ,heightWindow ;
+// 语音波动动画
+var siriWave  ;
+
+$(function () {
+    // $(".voice-txt").focus();
+    siriWave = new SiriWave({
+        container: $("#siri-container")[0],
+        style: "ios",
+        height: 200,
+        width: widthWindow,
+    });
+    siriWave.stop()
+    checkAlive(true) ; //检查服务器是否配置成功。
+
+    widthWindow = $(window).width();
+    heightWindow = $(window).height();
     var offsetY = 110; // 116 ;
     GameOptions = {
-        width: width  // 800 //游戏屏幕的高度。 
-        , height: height //  600 //游戏屏幕的宽度。
+        width: widthWindow  // 800 //游戏屏幕的高度。 
+        , height: heightWindow //  600 //游戏屏幕的宽度。
         , ground_y: 400 - 65 //地面y坐标
         , fps: 10
         , actorWidth: 57 * 2 * 0.8
@@ -336,7 +351,8 @@ $(function () {
             this.texture = textureButtonDown;
             this.alpha = 1;
             _event_data_identifier = event.data.identifier;
-
+            console.log('onButtonDown', button.button_name);
+            event.stopPropagation()
         }
 
         function onButtonUp(event) {
@@ -350,11 +366,12 @@ $(function () {
             else {
                 this.texture = textureButton;
             }
-            console.log('onButtonUp', button.button_name, button);
+            console.log('onButtonUp', button.button_name);
             if (button.button_name == 'downBtn') sendText({ doEnter: true });
             else if (button.button_name == 'leftBtn') sendText({ text: `\n## ` + $('.voice-txt').val() });
             else if (button.button_name == 'rightBtn') sendText({ text: `\n### ` + $('.voice-txt').val() });
             else if (button.button_name == 'upBtn') {
+                // event.preventDefault()
                 // 如果当前输入框里面没有内容，那就删除电脑上的字符
                 if (!$('.voice-txt').val().length) sendText({ doDelete: true })
                 else deleteInputStr();
@@ -420,7 +437,7 @@ $(function () {
     var _joy_pad = new GameJoyPad(game_stage, {
         //--摇杆摇动角度变换时候的回调函数。
         onJoyStickMove: function (now_stick_angle, dis, now_stick_postion) {
-            console.log('position:', dis, now_stick_postion);
+            // console.log('position:', dis, now_stick_postion);
             _showMsg("摇杆角度为：" + now_stick_angle);
         }
         //--点击了控制按钮的回调事件。
@@ -428,19 +445,12 @@ $(function () {
             _showMsg("点击的按钮名称是：" + button_name);
         },
         onJoyStickEnd: function (now_stick_angle, dis, now_stick_postion) {
-            // if ($('.voice-txt').val().length) sendEvent('vibrate', { time: 100 })
-            // sendText({ text: $('.voice-txt').val() })
             console.log('onJoyStickEnd', now_stick_angle, dis) // ,now_stick_postion
             handleVoiceUp()
         },
         onJoyStickStart: function (event) {
-            // if (!window.Android) { // android app注入对象
-            //     var sound = new Howl({ src: ['res/done.mp3'] });
-            //     sound.play();
-            // }
-            // sendEvent('vibrate', { time: 100 })
-            // $('.voice-txt').val('');
             console.log('onJoyStickStart', event) // ,now_stick_postion
+            $('.voice-txt').val('')
             handleVoiceDown();
         },
     });
@@ -469,7 +479,6 @@ $(function () {
     }
     requestAnimationFrame(game_animate);
 
-
     function _debug(msg) {
         var _str = richText.text;
         richText.text = _str + "\n" + msg;
@@ -477,17 +486,30 @@ $(function () {
     function _showMsg(msg) {
         richText.text = msg;
     }
-    let baseUrl = '192.168.1.105:8375';
-    let url = `http://${baseUrl}/text/input`; //win10
-    async function sendText({ text, doEnter, doDelete } = {}) {
+
+})
+    //检查服务器是否配置成功。
+    async function checkAlive( showSuccess ) {
+        let res = await axios.get(url, { timeout: 1000 }).then(d => d.data).catch(e => { });
+        if( res == null) return new Howl({ src: ['res/fail.mp3'] }).play();
+        if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
+        console.log('checkAlive' , !!res )
+    }
+    async function sendText( sdata , mute) {
+        let { text , origin , action , doEnter, doDelete} = sdata || {} ;
         if ((!text || !text.length) && !doEnter && !doDelete) return;
         if (text) $('.voice-txt').val('');
+        action = action || 'append' , origin = origin || '' ; //默认
+        lastText = text ;
         // let url = 'http://192.168.1.102:8360/test/input' ; //win7
-        let res = await axios.get(url, { params: { text, doEnter, doDelete } }).then(d => d.data).catch(e => { });
-        if (!res) new Howl({ src: ['res/fail.wav'] }).play();
-        else sendEvent('vibrate', { time: 100 })
+        let res = await axios.get(url, { params: { text , origin , action , doEnter, doDelete } }).then(d => d.data).catch(e => { });
+        if(!mute){
+            if (!res) new Howl({ src: ['res/fail.mp3'] }).play();
+            else sendEvent('vibrate', { time: 100 })
+        }
         console.log('sendText', text, res);
     }
+
     function deleteInputStr() {
         let result, temp = $('.voice-txt').val();
         temp = temp.substr(0, temp.length - 2); // 最后1个字符通常都是，或。，避免只删除1个字符。
@@ -516,15 +538,6 @@ $(function () {
         }
     }
 
-    // 语音波动动画
-    var siriWave = new SiriWave({
-        container: $("#siri-container")[0],
-        style: "ios",
-        height: 200,
-        width: width,
-    });
-    siriWave.stop()
-
     function connectWebViewJavascriptBridge(callback) {
         if (window.WebViewJavascriptBridge) {
             callback(WebViewJavascriptBridge)
@@ -537,18 +550,23 @@ $(function () {
 
     connectWebViewJavascriptBridge(function (bridge) {
         bridge.init(function (message, responseCallback) { })
-
         // 处理语音结果
         bridge.registerHandler("handleVoiceResult", function (res, responseCallback) {
             res = typeof res == 'string' ? JSON.parse(res) : res
             if (0 == res.return_code) {
-                $('.voice-txt').val(res.data)
-                // if ($('.voice-txt').val().length) {
-                //     sendEvent('vibrate', { time: 100 })
-                // }
-                // sendText({ text: $('.voice-txt').val() })
+                let { data: text , origin , pgs , is_last } = res ;
+                let  action = res.pgs == 'rpl' ? 'replace' : 'append' ;
+                console.log('handleVoiceResult sendText ' , origin && origin == lastText , origin == lastText , origin , lastText  , text)
+                if( is_last || ( origin && origin == lastText )) { 
+                    var immediately = !!is_last ;
+                    delaySend( { text , origin , action } , true , immediately);
+                } else $('.voice-txt').val(res.data) , $('.voice-txt').scrollTop( $('.voice-txt')[0].scrollHeight  )  ;
             }
         })
+        bridge.registerHandler("handleVoiceEnd", function (res, responseCallback) {
+            new Howl({ src: ['res/end.mp3'] }).play();
+        })
+
     })
 
     /**
@@ -558,6 +576,29 @@ $(function () {
     function launchHandleToast(msg) {
         WebViewJavascriptBridge.callHandler('handleToast', msg)
     }
+    function sendVibrate(time) {
+        WebViewJavascriptBridge.callHandler('handleVibrate', time || 100)
+    }
+    var setTimeoutId , delayArr= [] ;
+    function delaySend(sdata , mute , immediately ) {
+        if( immediately) {
+            sendText( sdata , mute )
+            clearTimeout(setTimeoutId);
+            setTimeoutId = null ;
+            delayArr = [];
+            return
+        }
+        delayArr.push( [ sdata , mute ])
+        console.warn('delaySend push:' ,  sdata , mute , [].concat(delayArr) );
+        if( !setTimeoutId ) setTimeoutId = setTimeout(()=>{
+            clearTimeout(setTimeoutId);
+            setTimeoutId = null ;
+            console.error('delaySend:' , [].concat(delayArr) );
+            let [ s , m ] = delayArr.pop() ;
+            sendText( s , m )
+            delayArr = [];
+        } , 600)
+    }
 
     /**
      * 处理语音按钮按下
@@ -566,6 +607,8 @@ $(function () {
         try {
             siriWave.start()
             $('#siri-container').show()
+            checkAlive()
+            if( !window.WebViewJavascriptBridge) console.error('app初始化失败')  ; // alert('app初始化失败')
             WebViewJavascriptBridge.callHandler('handleVoiceDown', {}, function (res) {
                 res = typeof res == 'string' ? JSON.parse(res) : res
                 if (0 != res.return_code) {
@@ -575,9 +618,10 @@ $(function () {
                     return
                 }
             })
+            sendVibrate(100)
         } catch (e) {
             siriWave.stop()
-            console.error(e)
+            console.error(e.message)
             $('#siri-container').hide()
         }
     }
@@ -589,14 +633,16 @@ $(function () {
         try {
             siriWave.stop()
             $('#siri-container').hide()
+            // sendText({ text: $('.voice-txt').val() })
+            delaySend( { text: $('.voice-txt').val() } ) ;
             if (!window.WebViewJavascriptBridge) {
                 new Howl({ src: ['res/done.mp3'] }).play();
                 return
             }
             WebViewJavascriptBridge.callHandler('handleVoiceUp')
+            sendVibrate(50)
         } catch (e) {
+            alert('handleVoiceUp:\n' +e.message)
             console.error(e)
         }
     }
-
-})
