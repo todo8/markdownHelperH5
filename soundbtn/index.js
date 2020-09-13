@@ -437,6 +437,7 @@ $(function () {
         onJoyStickMove: function (now_stick_angle, dis, now_stick_postion) {
             // console.log('position:', dis, now_stick_postion);
             _showMsg("摇杆角度为：" + now_stick_angle);
+            handleVoiceMove( now_stick_angle, dis );
         }
         //--点击了控制按钮的回调事件。
         , onButtonClick: function (event, button_name) {
@@ -444,7 +445,7 @@ $(function () {
         },
         onJoyStickEnd: function (now_stick_angle, dis, now_stick_postion) {
             console.log('onJoyStickEnd', now_stick_angle, dis) // ,now_stick_postion
-            handleVoiceUp()
+            handleVoiceUp( now_stick_angle, dis )
         },
         onJoyStickStart: function (event) {
             console.log('onJoyStickStart', event) // ,now_stick_postion
@@ -494,13 +495,14 @@ $(function () {
         console.log('checkAlive' , !!res )
     }
     async function sendText( sdata , mute) {
-        let { text , origin , action , doEnter, doDelete} = sdata || {} ;
+        let { text , origin , action , doEnter, doDelete , doCancle , prefix , postfix } = sdata || {} ;
+        if( doCancle ) $('.voice-txt').val('') , text = null ;
         if ((!text || !text.length) && !doEnter && !doDelete) return;
         if (text) $('.voice-txt').val('');
         action = action || 'append' , origin = origin || '' ; //默认
         lastText = text ;
         // let url = 'http://192.168.1.102:8360/test/input' ; //win7
-        let res = await axios.get(url, { params: { text , origin , action , doEnter, doDelete } }).then(d => d.data).catch(e => { });
+        let res = await axios.get(url, { params: { text , origin , action , doEnter, doDelete , prefix  , postfix } }).then(d => d.data).catch(e => { });
         if(!mute){
             if (!res) new Howl({ src: ['res/fail.mp3'] }).play();
             else sendEvent('vibrate', { time: 100 })
@@ -557,8 +559,10 @@ $(function () {
                 console.log('handleVoiceResult sendText ' , origin && origin == lastText , origin == lastText , origin , lastText  , text)
                 if( is_last || ( origin && origin == lastText )) { 
                     var immediately = !!is_last ;
-                    delaySend( { text , origin , action } , true , immediately);
+                    let ext = soundDic[currSoundId] || {} ;
+                    delaySend( Object.assign( { text , origin , action } , ext ) , true , immediately);
                 } else $('.voice-txt').val(res.data) , $('.voice-txt').scrollTop( $('.voice-txt')[0].scrollHeight  )  ;
+                if( is_last ) currSoundId = null ;
             }
         })
         bridge.registerHandler("handleVoiceEnd", function (res, responseCallback) {
@@ -575,7 +579,9 @@ $(function () {
         WebViewJavascriptBridge.callHandler('handleToast', msg)
     }
     function sendVibrate(time) {
-        WebViewJavascriptBridge.callHandler('handleVibrate', time || 100)
+        try{
+            WebViewJavascriptBridge.callHandler('handleVibrate', time || 100)
+        }catch(e){}
     }
     var setTimeoutId , delayArr= [] ;
     function delaySend(sdata , mute , immediately ) {
@@ -603,6 +609,7 @@ $(function () {
      */
     function handleVoiceDown() {
         try {
+            currSoundId = `soundId_${ new Date().getTime() }` ;
             siriWave.start()
             $('#siri-container').show()
             checkAlive()
@@ -623,16 +630,53 @@ $(function () {
             $('#siri-container').hide()
         }
     }
-
+    function checkTouchMoveBtn(angle, dis) {
+         if( dis < 80 ) return ;
+         if( angle > 45 && angle <= 135 ) return 'upBtn';
+         else if( angle > 135 && angle <= 225 ) return 'leftBtn';
+         else if( angle > 225 && angle <= 315 ) return 'downBtn';
+         else  return 'rightBtn';
+    }
+    function transParams(btn){
+        let ext = {} ;
+        if(!btn) ext = {} ;
+        else if( btn == 'upBtn' ) ext = { doCancle : 1} ;
+        else if( btn == 'leftBtn' ) ext = { prefix : '\n## '} ;
+        else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
+        else ext = { prefix : '\n### ' } ; // right
+        return ext ;
+    }
+    let currSoundId , lastBtn = null ;
+    let soundDic = {} ;
+    function handleVoiceMove( angle, dis ) {
+        let btn = checkTouchMoveBtn( angle, dis );
+        let ext =  transParams(btn) ;
+        let soundMp3 = 'res/done.mp3' ;
+        if( lastBtn != btn ) {
+            if( btn == 'upBtn' ) soundMp3 = 'res/upBtn.mp3' ;
+            if( btn == 'leftBtn' ) soundMp3 = 'res/leftBtn.mp3' ;
+            if( btn == 'downBtn' ) soundMp3 = 'res/downBtn.mp3' ;
+            if( btn == 'rightBtn' ) soundMp3 = 'res/rightBtn.mp3' ;
+            btn && new Howl({ src: [soundMp3] ,volume: 0.1 }).play();
+            sendVibrate(50)
+            console.log('btn' , btn , lastBtn , ext , lastBtn == btn );
+        }
+        lastBtn = btn ;
+    }
     /**
      * 处理语音按钮抬起
      */
-    function handleVoiceUp() {
+    function handleVoiceUp(angle, dis) {
+        let btn = checkTouchMoveBtn( angle, dis );
+        let ext =  transParams(btn) ;
+        if( btn ) soundDic[currSoundId] = ext ;
+        console.log('btn' , btn , lastBtn , ext);
+        lastBtn = null ;1
         try {
             siriWave.stop()
             $('#siri-container').hide()
             // sendText({ text: $('.voice-txt').val() })
-            delaySend( { text: $('.voice-txt').val() } ) ;
+            delaySend( Object.assign(  { text: $('.voice-txt').val() }  , ext ) ) ;
             if (!window.WebViewJavascriptBridge) {
                 new Howl({ src: ['res/done.mp3'] }).play();
                 return
