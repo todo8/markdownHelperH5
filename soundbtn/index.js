@@ -7,6 +7,9 @@ let lastText , widthWindow ,heightWindow ;
 var siriWave  ;
 
 $(function () {
+    widthWindow = $(window).width();
+    heightWindow = $(window).height();
+    
     // $(".voice-txt").focus();
     siriWave = new SiriWave({
         container: $("#siri-container")[0],
@@ -17,9 +20,10 @@ $(function () {
     siriWave.stop()
     checkAlive(true) ; //检查服务器是否配置成功。
 
-    widthWindow = $(window).width();
-    heightWindow = $(window).height();
     var offsetY = 110; // 116 ;
+    let centerX = widthWindow/2 ;
+    let centerY =  heightWindow/2 ;
+    let joyY = heightWindow - 170 - 50  ; // 
     GameOptions = {
         width: widthWindow  // 800 //游戏屏幕的高度。 
         , height: heightWindow //  600 //游戏屏幕的宽度。
@@ -41,8 +45,8 @@ $(function () {
             joy_pad_background: "img/joy_bg.png"//摇杆的背景。
             , joy_pad_joystick: "img/Button_active.png" //摇杆正体。
             // , joy_pad_joystick: "img/RadialJoy_Area.png" //摇杆正体。
-            , joy_pad_x: 180 //摇杆的坐标
-            , joy_pad_y: 280 - offsetY //摇杆的y坐标  
+            , joy_pad_x: centerX  // 180 //摇杆的坐标
+            , joy_pad_y: joyY // 280 - offsetY //摇杆的y坐标  
             //--注意，所有缩放的尺寸都是按照unitiy3d获得的这些摇杆素材来设置的，假如替换了texture，请重新设置缩放尺寸。
             , joy_pad_background_scale: {
                 x: 0.5
