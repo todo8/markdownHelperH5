@@ -360,16 +360,10 @@ $(function () {
         }
 
         function onButtonUp(event) {
-            if (_event_data_identifier != event.data.identifier) {
-                return;
-            }
+            if (_event_data_identifier != event.data.identifier)  return ;
             this.isdown = false;
-            if (this.isOver) {
-                this.texture = textureButtonOver;
-            }
-            else {
-                this.texture = textureButton;
-            }
+            if (this.isOver) this.texture = textureButtonOver;
+            else this.texture = textureButton;
             console.log('onButtonUp', button.button_name);
             if (button.button_name == 'downBtn') sendText({ doEnter: true });
             else if (button.button_name == 'leftBtn') sendText({ text: `\n## ` + $('.voice-txt').val() });
@@ -499,19 +493,23 @@ $(function () {
         console.log('checkAlive' , !!res )
     }
     async function sendText( sdata , mute) {
-        let { text , origin , action , doEnter, doDelete , doCancle , prefix , postfix } = sdata || {} ;
-        if( doCancle ) $('.voice-txt').val('') , text = null ;
-        if ((!text || !text.length) && !doEnter && !doDelete) return;
+        let params , { text , origin , action , doEnter, doDelete , prefix , postfix , wrapper } = sdata || {} ;
+        console.warn('sendText in:', text, sdata );
+        if( doDelete && text ) {
+            $('.voice-txt').val('') , text = null ;
+            return ; // 输入框里面有内容，就只是清空输入框。如果输入框里面没内容，在删除电脑上的内容。
+        }
+        if ((!text || !text.length) && !doEnter && !doDelete && !prefix && !postfix ) return;
         if (text) $('.voice-txt').val('');
         action = action || 'append' , origin = origin || '' ; //默认
-        lastText = text ;
+        lastText = text , params = { text , origin , action , doEnter, doDelete , wrapper , prefix  , postfix } ;
         // let url = 'http://192.168.1.102:8360/test/input' ; //win7
-        let res = await axios.get(url, { params: { text , origin , action , doEnter, doDelete , prefix  , postfix } }).then(d => d.data).catch(e => { });
+        let res = await axios.get(url, { params  }).then(d => d.data).catch(e => { });
         if(!mute){
             if (!res) new Howl({ src: ['res/fail.mp3'] }).play();
             else sendEvent('vibrate', { time: 100 })
         }
-        console.log('sendText', text, res);
+        console.warn('sendText', text, res);
     }
 
     function deleteInputStr() {
@@ -636,17 +634,30 @@ $(function () {
     }
     function checkTouchMoveBtn(angle, dis) {
          if( dis < 80 ) return ;
-         if( angle > 45 && angle <= 135 ) return 'upBtn';
-         else if( angle > 135 && angle <= 225 ) return 'leftBtn';
-         else if( angle > 225 && angle <= 315 ) return 'downBtn';
-         else  return 'rightBtn';
+         // [0,1,2,3,4,5,6,7].map(i=> 22.5+45*i) 
+         if( angle > 337.5 || angle <= 22.5 ) return 'rightBtn';     
+         else if( angle > 292.5 && angle <= 337.5 ) return'downRightBtn';     
+         else if( angle > 247.5 && angle <= 292.5 ) return 'downBtn';   
+         else if( angle > 202.5 && angle <= 247.5 ) return 'downLeftBtn';
+         else if( angle > 157.5 && angle <= 202.5 ) return  'leftBtn';
+         else if( angle > 112.5 && angle <= 157.5 ) return 'upLeftBtn';
+         else  if( angle > 67.5 && angle <= 112.5 ) return   'upBtn';
+         else return 'upRightBtn';
+         // if( angle > 45 && angle <= 135 ) return 'upBtn';
+         // else if( angle > 135 && angle <= 225 ) return 'leftBtn';
+         // else if( angle > 225 && angle <= 315 ) return 'downBtn';
+         // else  return 'rightBtn';
     }
     function transParams(btn){
         let ext = {} ;
         if(!btn) ext = {} ;
-        else if( btn == 'upBtn' ) ext = { doCancle : 1} ;
+        else if( btn == 'upBtn' ) ext = { doDelete : 1} ;
         else if( btn == 'leftBtn' ) ext = { prefix : '\n## '} ;
         else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
+        else  if( btn == 'upLeftBtn' ) ext = { prefix : '\n- '} ;
+        else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
+        else  if( btn == 'downLeftBtn' ) ext = { prefix : '\n> '} ;
+        else  if( btn == 'downRightBtn' ) ext = { prefix : '\n---\n'} ;
         else ext = { prefix : '\n### ' } ; // right
         return ext ;
     }
@@ -655,15 +666,19 @@ $(function () {
     function handleVoiceMove( angle, dis ) {
         let btn = checkTouchMoveBtn( angle, dis );
         let ext =  transParams(btn) ;
-        let soundMp3 = 'res/done.mp3' ;
+        let soundMp3 = 'res/done.mp3' ;   // right = 角度为0，逆时针方向旋转
         if( lastBtn != btn ) {
             if( btn == 'upBtn' ) soundMp3 = 'res/upBtn.mp3' ;
             if( btn == 'leftBtn' ) soundMp3 = 'res/leftBtn.mp3' ;
             if( btn == 'downBtn' ) soundMp3 = 'res/downBtn.mp3' ;
             if( btn == 'rightBtn' ) soundMp3 = 'res/rightBtn.mp3' ;
+            if( btn == 'upLeftBtn' ) soundMp3 = 'res/ding.mp3' ;
+            if( btn == 'downLeftBtn' ) soundMp3 = 'res/ding.mp3' ;
+            if( btn == 'downRightBtn' ) soundMp3 = 'res/ding.mp3' ;
+            if( btn == 'upRightBtn' ) soundMp3 = 'res/ding.mp3' ;
             btn && new Howl({ src: [soundMp3] ,volume: 0.1 }).play();
             sendVibrate(50)
-            console.log('btn' , btn , lastBtn , ext , lastBtn == btn );
+            // console.log('btn' , angle , btn , lastBtn , ext , lastBtn == btn );
         }
         lastBtn = btn ;
     }
