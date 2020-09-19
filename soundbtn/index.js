@@ -426,7 +426,7 @@ $(function () {
     }
 
 
-    var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height, { backgroundColor: 0x1099bb, transparent: !1 });
+    var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height, { backgroundColor: 0x63ADD0, transparent: !1 });
     //var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height);
     var game_stage = new PIXI.Container(0x66FF99);
     $("#game").append(game_renderer.view);
@@ -488,7 +488,7 @@ $(function () {
     //检查服务器是否配置成功。
     async function checkAlive( showSuccess ) {
         let res = await axios.get(url, { timeout: 1000 }).then(d => d.data).catch(e => { });
-        if( res == null) return new Howl({ src: ['res/fail.mp3'] }).play();
+        if( res == null) return new Howl({ src: ['res/404.mp3'] }).play(); //无法连接
         if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
         console.log('checkAlive' , !!res )
     }
