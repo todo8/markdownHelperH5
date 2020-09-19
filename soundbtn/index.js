@@ -371,8 +371,8 @@ $(function () {
             else this.texture = textureButton;
             console.log('onButtonUp', button.button_name);
             if (button.button_name == 'downBtn') sendText({ doEnter: true });
-            else if (button.button_name == 'leftBtn') sendText({ text: `\n## ` + $('.voice-txt').val() });
-            else if (button.button_name == 'rightBtn') sendText({ text: `\n### ` + $('.voice-txt').val() });
+            else if (button.button_name == 'leftBtn') sendText({ preEnter:1 ,doEnter : 1,text: `## ` + $('.voice-txt').val() });
+            else if (button.button_name == 'rightBtn') sendText({ preEnter:1 ,doEnter : 1,text: `### ` + $('.voice-txt').val() });
             else if (button.button_name == 'upBtn') {
                 if ( $('.voice-txt').val().length) deleteInputStr();
                 else sendText({ doDelete: 1 }) // 如果当前输入框里面没有内容，那就删除电脑上的字符
@@ -498,16 +498,16 @@ $(function () {
         console.log('checkAlive' , !!res )
     }
     async function sendText( sdata , mute) {
-        let params , { text , origin , action , doEnter, doDelete , prefix , postfix , wrapper } = sdata || {} ;
+        let params , { text , origin , action , doEnter, preEnter ,doDelete , prefix , postfix , wrapper } = sdata || {} ;
         console.warn('sendText in:', text, sdata );
         if( doDelete && text ) {
             $('.voice-txt').val('') , text = null ;
             return ; // 输入框里面有内容，就只是清空输入框。如果输入框里面没内容，在删除电脑上的内容。
         }
-        if ((!text || !text.length) && !doEnter && !doDelete && !prefix && !postfix ) return;
+        if ((!text || !text.length) && !preEnter && !doEnter && !doDelete && !prefix && !postfix ) return;
         if (text) $('.voice-txt').val('');
         action = action || 'append' , origin = origin || '' ; //默认
-        lastText = text , params = { text , origin , action , doEnter, doDelete , wrapper , prefix  , postfix } ;
+        lastText = text , params = { text , origin , action , preEnter, doEnter, doDelete , wrapper , prefix  , postfix } ;
         // let url = 'http://192.168.1.102:8360/test/input' ; //win7
         let res = await axios.get(url, { params  }).then(d => d.data).catch(e => { });
         if(!mute){
@@ -657,13 +657,13 @@ $(function () {
         let ext = {} ;
         if(!btn) ext = {} ;
         else if( btn == 'upBtn' ) ext = { doDelete : 1} ;
-        else if( btn == 'leftBtn' ) ext = { prefix : '\n## '} ;
+        else if( btn == 'leftBtn' ) ext = { preEnter:1 , prefix : '## ' ,doEnter : 1} ;
         else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
-        else  if( btn == 'upLeftBtn' ) ext = { prefix : '\n- '} ;
+        else  if( btn == 'upLeftBtn' ) ext = { preEnter:1 , prefix : '- '} ;
         else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
-        else  if( btn == 'downLeftBtn' ) ext = { prefix : '\n> '} ;
-        else  if( btn == 'downRightBtn' ) ext = { prefix : '\n---\n'} ;
-        else ext = { prefix : '\n### ' } ; // right
+        else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
+        else  if( btn == 'downRightBtn' ) ext = { preEnter:1 , prefix : '---' , doEnter : 1} ;
+        else ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
         return ext ;
     }
     let currSoundId , lastBtn = null ;
