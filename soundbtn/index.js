@@ -10,6 +10,11 @@ $(function () {
     widthWindow = $(window).width();
     heightWindow = $(window).height();
     
+    $('.voice-txt').css('border-radius','8px')
+    $('.voice-txt').css('margin','8px')
+    $('.voice-txt').css('padding','8px')
+    $('.voice-txt').width( widthWindow - 36 ); //不知道为什么36，只是界面效果调整
+
     // $(".voice-txt").focus();
     siriWave = new SiriWave({
         container: $("#siri-container")[0],

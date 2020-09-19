@@ -21,20 +21,31 @@
         body {
             padding: 0;
             margin: 0;
-            background: #000;
+            background: #63ADD0;
         }
 
         .body-main {
             margin: 0;
             padding-bottom: 0;
         }
+
+        .textWrapper{
+            position: absolute; /* */
+            background-color: #63ADD0 ;
+            width: 100%;
+           /* width:remainder;
+            margin: 6px;
+            overflow:auto;*/
+        }
         /*  background-color: #034769;  */
         .voice-txt {
+            /*position: absolute;  */
             z-index: 10;
-            position: absolute;
-            width: 98%;
+            width: 100%;
             background-color: #086fa1; 
+            box-sizing: border-box;
             color: #ffffff;
+            border: solid 2px #3ca0d0;
         }
         .voice-txt::-webkit-input-placeholder {color: #cccccc;}
         .voice-txt ::-moz-placeholder {color: #cccccc;}
@@ -57,7 +68,7 @@
         #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
     </style>
     <div class="body-main">
-        <textarea class="voice-txt" rows="3" readonly  placeholder='语音自动识别，快速发布到电脑上，AI动态修复语音内容。'></textarea>
+        <div class="textWrapper"><textarea class="voice-txt" rows="3" readonly  placeholder='语音自动识别，快速发布到电脑上，AI动态修复语音内容。'></textarea></div>
         <div id="game"></div>
         <div id="siri-container"></div>
     </div>
