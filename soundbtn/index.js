@@ -695,7 +695,7 @@ $(function () {
         let ext =  transParams(btn) ;
         if( btn ) soundDic[currSoundId] = ext ;
         console.log('btn' , btn , lastBtn , ext);
-        lastBtn = null ;1
+        lastBtn = null ;
         try {
             siriWave.stop()
             $('#siri-container').hide()
