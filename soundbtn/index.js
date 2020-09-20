@@ -1,6 +1,6 @@
 var GameOption;
 
-let baseUrl = localStorage.baseUrl || '192.168.1.105:8088';
+let baseUrl = window.localStorage.baseUrl || '192.168.1.105:8088';
 let url = `http://${baseUrl}/text/input`; //win10
 let lastText , widthWindow ,heightWindow ;
 // 语音波动动画
@@ -499,10 +499,49 @@ $(function () {
             return 
         }
         if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
-        localStorage.baseUrl = baseUrl ;
+        window.localStorage.baseUrl = baseUrl ;
         console.log('checkAlive' , !!res )
     }
-    async function setConfigPC(){
+    function setConfigPC(){
+        let tempIP = baseUrl.substr(0,12) ;
+        prompt({
+        title: '填入电脑上的ip地址：',
+        negative: '取消',
+        positive: '确定',
+        placeholder: baseUrl , // '192.168.1.105:8088',
+        defaultValue: tempIP  , // '192.168.1.10',
+        callback: function(input) {
+            if( !input ) return console.error('取消了输入') ;
+            let [ ip , port ] = input.split(':') ;
+            ip = ip || '192.168.1.105' , port = port || '8088' ;
+            baseUrl = `${ip}:${port}` ;
+            url = `http://${baseUrl}/text/input`;
+            checkAlive( true );
+        }
+    });
+    }
+    function setConfigPC2(){
+        jqalert({
+            title:'提示',
+            prompt:'填入配对电脑的ip：',
+            defaultText:'192.168.1.10',
+            placeholder:'192.168.1.105:8088',
+            yestext:'提交',
+            notext:'取消',
+            yesfn:function () {
+                if( !input ) return console.error('取消了输入') ;
+                let [ ip , port ] = input.split(':') ;
+                ip = ip || '192.168.1.105' , port = port || '8088' ;
+                baseUrl = `${ip}:${port}` ;
+                url = `http://${baseUrl}/text/input`;
+                checkAlive( true );
+            },
+            nofn:function () {
+                jqtoast('您已放弃配对电脑');
+            }
+        })
+    }
+    function setConfigPC1(){
         var input = prompt("填入电脑上的ip地址：",'192.168.1.10');
         if( !input ) return console.error('取消了输入') ;
         let [ ip , port ] = input.split(':') ;
