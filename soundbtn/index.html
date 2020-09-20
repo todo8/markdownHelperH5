@@ -12,6 +12,7 @@
     <meta content="email=no" name="format-detection">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
     <title>AI麦克风</title>
 
 </head>
@@ -63,6 +64,14 @@
             top: 50px;
              /*bottom: 0;*/
         }
+        .copyright{
+            position: absolute;
+            z-index: 1;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+        }
 
         /*#game { background-color: rgba(0, 0, 0, 0.9); }
         #game canvas { background-color: rgba(0, 0, 0, 0.9); }*/
@@ -71,10 +80,12 @@
         <div class="textWrapper"><textarea class="voice-txt" rows="3" readonly  placeholder='语音自动识别，快速发布到电脑上，AI动态修复语音内容。'></textarea></div>
         <div id="game"></div>
         <div id="siri-container"></div>
+        <div class="copyright" >by 时间清单 7dtime.com</div>
     </div>
     <script src="js/jquery.min.js"></script>
+    <script src="js/popups.js"></script>
     <script src="js/migrate.js"></script>
-    <script src="js/Box2dWeb-2.1.a.3.min.js"></script>
+    <!-- <script src="js/Box2dWeb-2.1.a.3.min.js"></script> -->
     <script src="js/pixi.min.js"></script>
     <script src="js/axios.min.js"></script>
     <script src="js/howler.min.js"></script>

@@ -1,6 +1,6 @@
 var GameOption;
 
-let baseUrl = '192.168.1.105:8088';
+let baseUrl = localStorage.baseUrl || '192.168.1.105:8088';
 let url = `http://${baseUrl}/text/input`; //win10
 let lastText , widthWindow ,heightWindow ;
 // 语音波动动画
@@ -493,9 +493,23 @@ $(function () {
     //检查服务器是否配置成功。
     async function checkAlive( showSuccess ) {
         let res = await axios.get(url, { timeout: 1000 }).then(d => d.data).catch(e => { });
-        if( res == null) return new Howl({ src: ['res/404.mp3'] }).play(); //无法连接
+        if( res == null) {
+            new Howl({ src: ['res/404.mp3'] }).play(); //无法连接
+            setConfigPC()
+            return 
+        }
         if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
+        localStorage.baseUrl = baseUrl ;
         console.log('checkAlive' , !!res )
+    }
+    async function setConfigPC(){
+        var input = prompt("填入电脑上的ip地址：",'192.168.1.10');
+        if( !input ) return console.error('取消了输入') ;
+        let [ ip , port ] = input.split(':') ;
+        ip = ip || '192.168.1.105' , port = port || '8088' ;
+        baseUrl = `${ip}:${port}` ;
+        url = `http://${baseUrl}/text/input`;
+        checkAlive( true );
     }
     async function sendText( sdata , mute) {
         let params , { text , origin , action , doEnter, preEnter ,doDelete , prefix , postfix , wrapper } = sdata || {} ;
