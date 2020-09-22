@@ -503,7 +503,7 @@ $(function () {
         console.log('checkAlive' , !!res )
     }
     function setConfigPC(){
-        let tempIP = baseUrl.substr(0,12) ;
+        let tempIP = baseUrl.split(':')[0] ; // baseUrl.substr(0,12) ;
         prompt({
         title: '填入电脑上的ip地址：',
         negative: '取消',
