@@ -1,149 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum=1.0, user-scalable=no shrink-to-fit=no" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>智能麦克风</title>
-    <link rel="stylesheet" href="./css/base.css" />
-    <style type="text/css">
+    <meta charset="UTF-8">
+    <title>AI麦克风-ai写作神器，快速给markdown排版</title>
+<meta name="keywords" content="ai麦克风,ai写作,讯飞麦克风," />
+<meta name="description" content="APP语音识别快速转换成文字之后，快速输入文字到电脑，支持智能修复文字，自动添加标点符号。以后再也不用在电脑上使用键盘打字了。markdown写作：通过手势可以快速给文档增加排版。ai写作神器，快速给markdown排版。搭配markdown的编辑器Typora软件更好哦。" />
 
-    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 </head>
-
 <body>
-    <div><span>状态：<span><span id="status"><span></div>
-    <div><span>内容：<span><span  id="voice-txt"><span></div>
-    <br/>
-    <div><span>临时：<span><span  id="fixed-txt"><span>Hello! 请说出你想说话。。。！</div>
-    <section class="fixed-box" style="display: block;" id="fixed-box">
-        <div class="fixed-main">
-            <div class="fixed-icon">
-                <img src="./img/voice.png" alt="" />
-            </div>
-        </div>
-    </section>
+	 <style type="text/css">
+	        .copyright{
+	            position: absolute;
+	            bottom: 30px;
+	            z-index: 1;
+	            width: 100%;
+	            text-align: center;
+	        }
+	 </style>
+	<h1>官网待制作</h1>
+	<div> 基本用法：APP语音识别快速转换成文字之后，快速输入文字到电脑，支持智能修复文字，自动添加标点符号。以后再也不用在电脑上使用键盘打字了。markdown写作：通过手势可以快速给文档增加排版。ai写作神器，快速给markdown排版。搭配markdown的编辑器Typora软件更好哦。</div>
+	<div> 扩展用法：对着APP说，百度搜索时间清单，就可以帮你快速打开百度搜索。
+	<br/>
+		<ul>
+			<li>1、百度搜索xxx</li>
+			<li>2、谷歌搜索xxx</li>
+			<li>3、淘宝搜索xxx</li>
+			<li>4、哔哩哔哩搜索xxx</li>
+			<li>5、打开QQ，（需要手动配置）</li>
+		</ul>
+		配置文件：安装目录中config.txt。
+		本项目可开源源代码，如果你有编程能力，可以联系作者QQ4077725，加快开源工作。使用python、android、h5、
+	</div>
 
-    <script src="./js/crypto-js.js"></script>
-    <script src="./js/voice.js"></script>
-    <script src="./js/axios.min.js"></script>
-    <script src="./js/jquery.slim.min.js"></script>
-    <script src="./js/jquery.touchSwipe.min.js"></script>
-    <script src="./js/howler.min.js"></script>
-    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script> -->
-    <script>
-        $(  function() {         
-            window.ontouchstart = function(e) { 
-                e.preventDefault(); 
-            }; 
-            window.addEventListener('contextmenu', function(e){
-              e.preventDefault();
-            });
+	<h2>window 电脑端程序下载：</h2>
+	<div>windows 系统：<a href="http://cdn.7dtime.com/other/aiPhone.exe">http://ai.7dtime.com/aiPhone.exe</a></div>
+	<div> 待制作安装版本，非安装版本在部分软件上面会被360安全卫士弹窗提示。如qq上提示会强制QQ自动关闭，在重新登录时会监听账号密码。</div>
+	<h2>安卓app 下载：</h2>
+	<div><a href="http://ai.7dtime.com/aiPhone.apk">http://ai.7dtime.com/aiPhone.apk</a></div>
+	<div class="qrcodeApp"></div>
+	 <div class="copyright" ><a href="http://7dtime.com">by 时间清单 7dtime.com</a></div>
 
-            // var vConsole = new VConsole();          
-            // console.log('Hello world');
+	<script type="text/javascript">
+		$(function () {
+			$('.qrcodeApp').qrcode("http://ai.7dtime.com/aiPhone.apk");
+		})
+	</script>
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "https://hm.baidu.com/hm.js?630e303b798561ae2892f274e1d6656a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
 
-            // $("body").on("touchstart", function(e) {
-            //    e.preventDefault();
-            // });
-            // $("body").on("touchend", function(e) {
-            //    e.preventDefault();
-            // });
-            // $("body").on("touchmove", function(e) {
-            //    e.preventDefault();
-            // });
-
-            $(".fixed-icon").on("touchstart", async function(e) {
-                 console.log('startBtn touchstart')
-                 $(".fixed-icon").addClass('fixed-icon-start');
-                 let status = await  iatRecorder.start();
-                 console.log('status',status);
-                 $("#status").text(status.data || status.errmsg);
-                 if(!window.Android){ // android app注入对象
-                    var sound = new Howl({ src: ['res/done.mp3']});
-                    sound.play();
-                 }                 
-                sendEvent('vibrate', {time:500})
-                $('#voice-txt').text('');
-            });
-            $(".fixed-icon").on("touchend", async function(e) {
-                console.log('startBtn touchend', new Date().getTime() ,  $('#fixed-txt').text().length )
-                $(".fixed-icon").removeClass('fixed-icon-start');
-                 sendEvent('vibrate', {time:200})
-                 await iatRecorder.stop();
-                 $('#voice-txt').text(  $('#fixed-txt').text() );
-                 sendText( $('#fixed-txt').text() )
-                 console.log('iatRecorder.stop', new Date().getTime() ,  $('#fixed-txt').text().length)
-            });
-
-            // const voiceTxt = document.querySelector('#voice-txt');
-            // const fixedBox = document.querySelector('#fixed-box');
-            const fixedTxt = document.querySelector('#fixed-txt');
-
-            const startBtn = document.querySelector('.fixed-icon');
-            // fixedBox.style.display = 'block';
-            let fiveTell = null;
-
-            // 实例化迅飞语音听写（流式版）WebAPI
-            const iatRecorder = new IatRecorder({
-
-                // 服务接口认证信息 注：apiKey 和 apiSecret 的长度都差不多，请要填错哦！
-                appId: '5af63ec2',
-                apiKey: 'de388b73b3e3dec7294639029bb489b4',
-                apiSecret: '8a29210db51e753293d2251bf9c36e8d',
-                // 注：要获取以上3个参数，请到迅飞开放平台：https://www.xfyun.cn/services/voicedictation
-
-                onWillStatusChange: function (oldStatus, newStatus) {
-                    //可以在这里进行页面中一些交互逻辑处理：注：倒计时（语音听写只有60s）,录音的动画，按钮交互等！
-                    // fixedBox.style.display = 'block';
-                },
-                onTextChange: function (text) {
-                    //监听识别结果的变化
-                    fixedTxt.innerText = text;
-                    // voiceTxt.value = text;
-                    // sendText(text)
-
-                    // 3秒钟内没有说话，就自动关闭
-                    if (text) {
-                        clearTimeout(fiveTell);
-                        fiveTell = setTimeout(function () {
-                            iatRecorder.stop();
-                            // fixedBox.style.display = 'none';
-                        }, 3000);
-                    };
-                }
-            });
-            let can = iatRecorder.recorderCheck() ;
-            $("#status").text( !can ? '设备无法录音':'有录音设备' );
-         });
-
-        let baseUrl = '192.168.1.105:8375' ;
-        let url = `http://${baseUrl}/text/input` ; //win10
-        async function sendText(text){
-            if(!text || !text.trim().length ) return ;
-            $('#voice-txt').text(text);
-            // let url = 'http://192.168.1.102:8360/test/input' ; //win7
-            let res = await axios.get(`${url}?str=${text}`).then(d=>d.data).catch(e=>{}) ;
-            console.log('sendText',text , res);
-        }
-
-      // android调用js
-      function dispatchEvent(eventName, data) {
-        // alert('dispatchEvent:' + eventName);
-      }
-
-      // 调用android中的逻辑.
-      function sendEvent(eventName, data) {
-        try {
-           if(  typeof data == 'object' ) data = JSON.stringify(data);
-           window.Android && window.Android.invoke('sendEvent', eventName, data); //
-        } catch (e) {
-           // alert('dispatchEvent error:' + e.message);
-           console.log('dispatchEvent error', e)
-        }
-      }
-    </script>
 </body>
-
 </html>

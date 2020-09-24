@@ -509,12 +509,12 @@ $(function () {
         negative: '取消',
         positive: '确定',
         placeholder: baseUrl , // '192.168.1.105:8088',
-        defaultValue: tempIP  , // '192.168.1.10',
+        defaultValue: tempIP  , 
         callback: function(input) {
             if( !input ) return console.error('取消了输入') ;
             let [ ip , port ] = input.split(':') ;
             ip = ip || '192.168.1.105' , port = port || '8088' ;
-            baseUrl = `${ip}:${port}` ;
+            baseUrl = `${ip.trim()}:${port.trim()}` ;
             url = `http://${baseUrl}/text/input`;
             checkAlive( true );
         }
