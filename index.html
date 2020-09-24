@@ -1,61 +1,757 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>AI麦克风-ai写作神器，快速给markdown排版</title>
-<meta name="keywords" content="ai麦克风,ai写作,讯飞麦克风," />
-<meta name="description" content="APP语音识别快速转换成文字之后，快速输入文字到电脑，支持智能修复文字，自动添加标点符号。以后再也不用在电脑上使用键盘打字了。markdown写作：通过手势可以快速给文档增加排版。ai写作神器，快速给markdown排版。搭配markdown的编辑器Typora软件更好哦。" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="keywords" content="ai麦克风,ai写作,效率写作软件,markdown写作,讯飞麦克风" />
+    <meta name="description" content="APP语音识别快速转换成文字之后，快速输入文字到电脑，支持智能修复文字，自动添加标点符号。以后再也不用在电脑上使用键盘打字了。markdown写作：通过手势可以快速给文档增加排版。ai写作神器，快速给markdown排版。搭配markdown的编辑器Typora软件更好哦。" />
+    <meta name="viewport" content="width=device-width, initial-scale=0, maximum-scale=1">
+    <meta name="keywords" content="时间清单下载,ios,android,ios下载，PC下载，app下载，小程序，h5,客户端" />
+    <meta name="description" content="全平台兼容的GTD时间管理软件,一处使用多处共享.通过gtd软件知道时间都去哪了,整理碎片时间,安排好学习计划进行刻意练习.学习总结是我们升职加薪的宝贵经验" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?1018">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/bootstrap.min.css" />
+    <meta name="apple-mobile-web-app-title" content="RongCloud">
+    <meta name="application-name" content="RongCloud">
+    <meta name="theme-color" content="#ffffff">
+    <link href="https://cdns.7dtime.com/z39/index/templets/default/style/base.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdns.7dtime.com/z39/index/templets/default/style/layout.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdns.7dtime.com/z39/index/css/swiper.min.css" rel="stylesheet" type="text/css" />
+    <!--<link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/7day.css">-->
+    <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/7day2.css">
+    <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/font-awesome.min.css" />
+    <script src="https://cdns.7dtime.com/z39/index/templets/default/js/jquery-1.10.1.min.js"></script>
+    <script src="https://cdns.7dtime.com/z39/index/js/swiper.mine.js?v=407"></script>
+    <script type="text/javascript"></script>
+    <style>
+    .col-lg-4 {
+        width: 22.8%;
+    }
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    #banner {
+        float: none;
+    }
+
+    #banner #mainTheme {
+        float: left;
+        margin-top: 50px;
+    }
+
+    #banner .button {
+        float: left;
+        margin: 20px auto 0;
+        border-radius: 5px;
+        ;
+    }
+
+    .footheight {
+        height: 70px;
+        overflow: hidden;
+    }
+
+    .footernew {
+        color: #515151;
+        height: 100px;
+        line-height: 24px;
+        margin: 12px auto 0;
+        text-align: center;
+        width: 1000px;
+    }
+
+    .footernew .fr {
+        float: right;
+        padding: 5px 3px 0;
+        width: 72px;
+    }
+
+    .extra,
+    .fr,
+    .layout .fr {
+        float: right;
+        display: inline;
+    }
+
+    .footernew p {
+        border: 1px solid #D2D2D2;
+        float: left;
+        height: 50px;
+        line-height: 20px;
+        margin: 6px;
+        padding: 0;
+        background-color: #ffffff;
+    }
+
+    .footernew,
+    .footernew p {
+        font-size: 12px;
+        overflow: hidden;
+    }
+
+    .footernew a:visited {
+        color: #515151;
+    }
+
+    .footernew a {
+        color: #515151;
+        text-decoration: none;
+    }
+
+    .pc-g-footer-copyright {
+        display: flex;
+        justify-content: center;
+        width: auto;
+    }
+    </style>
 </head>
+
 <body>
-	 <style type="text/css">
-	        .copyright{
-	            position: absolute;
-	            bottom: 30px;
-	            z-index: 1;
-	            width: 100%;
-	            text-align: center;
-	        }
-	 </style>
-	<h1>官网待制作</h1>
-	<div> 基本用法：APP语音识别快速转换成文字之后，快速输入文字到电脑，支持智能修复文字，自动添加标点符号。以后再也不用在电脑上使用键盘打字了。markdown写作：通过手势可以快速给文档增加排版。ai写作神器，快速给markdown排版。搭配markdown的编辑器Typora软件更好哦。</div>
-	<div> 扩展用法：对着APP说，百度搜索时间清单，就可以帮你快速打开百度搜索。
-	<br/>
-		<ul>
-			<li>1、百度搜索xxx</li>
-			<li>2、谷歌搜索xxx</li>
-			<li>3、淘宝搜索xxx</li>
-			<li>4、哔哩哔哩搜索xxx</li>
-			<li>5、打开QQ，（需要手动配置）</li>
-		</ul>
-		配置文件：安装目录中config.txt。
-		本项目可开源源代码，如果你有编程能力，可以联系作者QQ4077725，加快开源工作。使用python、android、h5、
-	</div>
+    <header id="navigator">
+        <div>
+            <div class="logo-icon">
+                <a href="https://7dtime.com" style="cursor: pointer;">
+            <img src="https://cdns.7dtime.com/z39pc/logo.png" height="45" class="logo"></a>
+            </div>
+        </div>
+        <div class="nav-list">
+            <ul>
+                <li class="active"><a href="#">AI麦克风</a></li>
+                <li><a href="https://7dtime.com">时间清单</a></li>
+                <li><a href="https://7dtime.com/mdteach/">教程</a></li>
+                <li><a href="http://b.7dtime.com" target="_blank">电子书</a></li>
+                <li><a href="/aboutus/" target="_blank">关于我们</a></li>
+            </ul>
+        </div>
+    </header>
+    <div id="banner">
+        <a class="arrow-left" href="#"></a>
+        <a class="arrow-right" href="#"></a>
+        <div class="swiper-container" id="bannerSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" id="swiper-slide1">
+                    <div class="inner">
+                        <div id="mainTheme" style="padding-top:60px;">
+                            <img src="https://cdns.7dtime.com/z39/index/images/downbanner2.png" alt="" style="width:420px; height:520px;"></div>
+                        <p style="margin-top:150px; height: 70px; float: left; margin-left:50px;" data-swiper-parallax="-1500">AI麦克风-代替键盘打字</p>
+                        <p style="margin-top:0; float: left; margin-left:50px; font-size:20px;" data-swiper-parallax="-1500">语音识别文字后传递电脑，markdown格式写作快速排版软件</p>
+                        <div class="subbtn" data-swiper-parallax="-3000" style="float: left; width: 150px; margin-left: 50px; margin-top:10px;">
+                            <img style="width: 150px; height:150px; float: left;" src="http://cdn.7dtime.com/time_tlog/2018-06-14_qrcode512.png" alt="">
+                            <a class="button" href="http://cdn.7dtime.com/other/aiPhone.exe" data-swiper-parallax="0" data-swiper-parallax-duration="1000">点击下载</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide" id="swiper-slide2"></div>
+        <div id="bannerpagination" class="pagination"></div>
+    </div>
 
-	<h2>window 电脑端程序下载：</h2>
-	<div>windows 系统：<a href="http://cdn.7dtime.com/other/aiPhone.exe">http://ai.7dtime.com/aiPhone.exe</a></div>
-	<div> 待制作安装版本，非安装版本在部分软件上面会被360安全卫士弹窗提示。如qq上提示会强制QQ自动关闭，在重新登录时会监听账号密码。</div>
-	<h2>安卓app 下载：</h2>
-	<div><a href="http://ai.7dtime.com/aiPhone.apk">http://ai.7dtime.com/aiPhone.apk</a></div>
-	<div class="qrcodeApp"></div>
-	 <div class="copyright" ><a href="http://7dtime.com">by 时间清单 7dtime.com</a></div>
+    <div class="container-fluid m" id="zt">
+        <div class="container m" id="zt">
+            <div class="container m0">
+                <div class="titleItemList">
+                    <ol class="breadcrumb jjk20 z16 top10">
+                        <li>
+                            <b>
+                  <i class="fa fa-code"></i>下载</b>
+                            <span class="zhe">DownLoad</span></li>
+                    </ol>
+                    <!-- <a class="more" href="#">更多>></a> --></div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                    <img alt="时间清单 gtd时间管理工具" src="https://cdns.7dtime.com/z39/index/images/weappbg.jpg">
+                </a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>7天时间清单:7天时间看一生,升级你的人生效率系统</h4>
+                        </a>
+                        <small>GTD时间管理小程序帮助我们自我管理快速成长,解决拖延症提升自我.刻意练习让我们成为最好的自己,露出骄傲的笑容.事半功倍更轻松.</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; 微信小程序-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;6130</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;684</span>
+                        <div class="cover-yh">
+                            <a href="#" data-container="body" data-toggle="popover" data-placement="top" data-content="时间管理工具" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <img src="https://cdns.7dtime.com/z39/index/images/7dtime.jpg" alt="7天时间清单微信小程序二维码">
+                        <p>扫码进入GTD'时间清单'小程序效率工具</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                    <img src="https://cdns.7dtime.com/z39/index/images/applebg.jpg" alt="时间清单的ios苹果App时间管理GTD效率办公">
+                </a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>ios时间清单:自我管理提高效率展露自信笑容,效率完成工作总结</h4>
+                        </a>
+                        <small>GTD效率工具:日程计划任务完成后生成时间记录,帮助工作总结和提高效率</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; App-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;10192</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;6093</span>
+                        <div class="cover-yh">
+                            <a href="mem486803" data-container="body" data-toggle="popover" data-placement="top" data-content="番茄闹钟时间管理工具" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.d7game.time&from=7dtime.com" target="_blank">
+                        <img src="http://cdn.7dtime.com/time_tlog/2018-06-14_qrcode512.png" alt="时间管理类效率办公的gtd时间清单工具">
+                        <p>微信扫码进入'时间清单'GTD工具</p>
+                    </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/androidbg.jpg">
+                    </a>
+                    <div class="cover-info">
+                        <a href="" target="_blank">
+                            <h4>安卓-时间清单:管理好自己的时间就是管理人生.让每个人都成为自己的项目经理.做好自我管理,才好管理他人.</h4>
+                        </a>
+                        <small>自动记录用户行为习惯数据,晚睡晚起和路上堵车浪费的时间.帮公司项目成员清晰每日工作任务,方便我们协同办公和自我管理.时间记录法直观的看到每天工作有效时间和碎片时间</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; App-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;42508</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;5260</span>
+                        <div class="cover-yh">
+                            <a href="mem331264" data-container="body" data-toggle="popover" data-placement="top" data-content="自我管理" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.d7game.time&from=7dtime.com" target="_blank">
+                        <img src="http://cdn.7dtime.com/time_tlog/2018-06-14_qrcode512.png" alt="">
+                        <p>微信扫码进入'时间清单'GTD工具</p>
+                    </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/windows.jpg"></a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>windows系统客户端安装版本</h4></a>
+                        <small>桌面更快速打开,不在和其他浏览器页面混到一起</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 电脑客户端</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/mac.jpg"></a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>苹果系统客户端安装版本</h4></a>
+                        <small>桌面更快速打开,不在和其他浏览器页面混到一起</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 电脑客户端</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pc.qq.com/search.html#!keyword=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/chrome.jpg"></a>
+                    <div class="cover-info">
+                        <a href="https://pc.qq.com/search.html#!keyword=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">
+                            <h4>推荐谷歌浏览器</h4></a>
+                        <small>系统用独立浏览器使用更方便,可以快速找到系统展开工作</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 浏览器</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pan.baidu.com/s/1lLujJHxziMTjUOBTlYPzyg" target="_blank">
+                    <img src="https://cdns.7dtime.com/z39/index/images/record.jpg"></a>
+                    <div class="cover-info">
+                        <a href="https://pan.baidu.com/s/1lLujJHxziMTjUOBTlYPzyg" target="_blank">
+                            <h4>视频需求说明-屏幕录像软件</h4></a>
+                        <small>用视频代替word文档需求说明,快速高效的告诉他人更详细信息</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; windows系统</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pan.baidu.com/s/1nCwt5IutDjOlG772Ixft7A#list/path=%2F%E8%BD%AF%E4%BB%B6" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/allfile.jpg">
+                    </a>
+                    <div class="cover-info">
+                        <a href="https://pan.baidu.com/s/1nCwt5IutDjOlG772Ixft7A#list/path=%2F%E8%BD%AF%E4%BB%B6" target="_blank">
+                            <h4>系统配套工具和时间管理电子书,做好自我管理</h4>
+                        </a>
+                        <small>系统软件及其他配套推荐的软件程序.还有程序员文本编辑器版本.</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; 云盘-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;4708</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;1510</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="姜闹钟" data-original-title="" title="">
+                                <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid m" id="zt">
+        <div class="container m" id="zt">
+            <div class="container m0">
+                <div class="titleItemList">
+                    <ol class="breadcrumb jjk20 z16 top10">
+                        <li>
+                            <b>
+                  <i class="fa fa-code"></i>相关下载</b>
+                            <span class="zhe">DownLoad</span></li>
+                    </ol>
+                    <!-- <a class="more" href="#">更多>></a> --></div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                    <img alt="时间清单 gtd时间管理工具" src="https://cdns.7dtime.com/z39/index/images/weappbg.jpg">
+                </a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>7天时间清单:7天时间看一生,升级你的人生效率系统</h4>
+                        </a>
+                        <small>GTD时间管理小程序帮助我们自我管理快速成长,解决拖延症提升自我.刻意练习让我们成为最好的自己,露出骄傲的笑容.事半功倍更轻松.</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; 微信小程序-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;6130</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;684</span>
+                        <div class="cover-yh">
+                            <a href="#" data-container="body" data-toggle="popover" data-placement="top" data-content="时间管理工具" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <img src="https://cdns.7dtime.com/z39/index/images/7dtime.jpg" alt="7天时间清单微信小程序二维码">
+                        <p>扫码进入GTD'时间清单'小程序效率工具</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                    <img src="https://cdns.7dtime.com/z39/index/images/applebg.jpg" alt="时间清单的ios苹果App时间管理GTD效率办公">
+                </a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>ios时间清单:自我管理提高效率展露自信笑容,效率完成工作总结</h4>
+                        </a>
+                        <small>GTD效率工具:日程计划任务完成后生成时间记录,帮助工作总结和提高效率</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; App-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;10192</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;6093</span>
+                        <div class="cover-yh">
+                            <a href="mem486803" data-container="body" data-toggle="popover" data-placement="top" data-content="番茄闹钟时间管理工具" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.d7game.time&from=7dtime.com" target="_blank">
+                        <img src="http://cdn.7dtime.com/time_tlog/2018-06-14_qrcode512.png" alt="时间管理类效率办公的gtd时间清单工具">
+                        <p>微信扫码进入'时间清单'GTD工具</p>
+                    </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/androidbg.jpg">
+                    </a>
+                    <div class="cover-info">
+                        <a href="" target="_blank">
+                            <h4>安卓-时间清单:管理好自己的时间就是管理人生.让每个人都成为自己的项目经理.做好自我管理,才好管理他人.</h4>
+                        </a>
+                        <small>自动记录用户行为习惯数据,晚睡晚起和路上堵车浪费的时间.帮公司项目成员清晰每日工作任务,方便我们协同办公和自我管理.时间记录法直观的看到每天工作有效时间和碎片时间</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; App-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;42508</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;5260</span>
+                        <div class="cover-yh">
+                            <a href="mem331264" data-container="body" data-toggle="popover" data-placement="top" data-content="自我管理" data-original-title="" title="">
+                            <i class="fa fa-user-secret"></i>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="ewm">
+                        <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.d7game.time&from=7dtime.com" target="_blank">
+                        <img src="http://cdn.7dtime.com/time_tlog/2018-06-14_qrcode512.png" alt="">
+                        <p>微信扫码进入'时间清单'GTD工具</p>
+                    </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/windows.jpg"></a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>windows系统客户端安装版本</h4></a>
+                        <small>桌面更快速打开,不在和其他浏览器页面混到一起</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 电脑客户端</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="#" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/mac.jpg"></a>
+                    <div class="cover-info">
+                        <a href="#" target="_blank">
+                            <h4>苹果系统客户端安装版本</h4></a>
+                        <small>桌面更快速打开,不在和其他浏览器页面混到一起</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 电脑客户端</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pc.qq.com/search.html#!keyword=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/chrome.jpg"></a>
+                    <div class="cover-info">
+                        <a href="https://pc.qq.com/search.html#!keyword=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">
+                            <h4>推荐谷歌浏览器</h4></a>
+                        <small>系统用独立浏览器使用更方便,可以快速找到系统展开工作</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; 浏览器</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pan.baidu.com/s/1lLujJHxziMTjUOBTlYPzyg" target="_blank">
+                    <img src="https://cdns.7dtime.com/z39/index/images/record.jpg"></a>
+                    <div class="cover-info">
+                        <a href="https://pan.baidu.com/s/1lLujJHxziMTjUOBTlYPzyg" target="_blank">
+                            <h4>视频需求说明-屏幕录像软件</h4></a>
+                        <small>用视频代替word文档需求说明,快速高效的告诉他人更详细信息</small></div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i>&nbsp; windows系统</div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10">&nbsp;470</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10">&nbsp;4</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="总督sir " data-original-title="" title="">
+                              <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-4 downItem">
+                    <a href="https://pan.baidu.com/s/1nCwt5IutDjOlG772Ixft7A#list/path=%2F%E8%BD%AF%E4%BB%B6" target="_blank">
+                        <img src="https://cdns.7dtime.com/z39/index/images/allfile.jpg">
+                    </a>
+                    <div class="cover-info">
+                        <a href="https://pan.baidu.com/s/1nCwt5IutDjOlG772Ixft7A#list/path=%2F%E8%BD%AF%E4%BB%B6" target="_blank">
+                            <h4>系统配套工具和时间管理电子书,做好自我管理</h4>
+                        </a>
+                        <small>系统软件及其他配套推荐的软件程序.还有程序员文本编辑器版本.</small>
+                    </div>
+                    <div class="cover-fields">
+                        <i class="fa fa-list-ul"></i> &nbsp; 云盘-自我管理-时间管理-GTD
+                    </div>
+                    <div class="cover-stat">
+                        <i class="fa fa-eye"></i>
+                        <span class="f10"> &nbsp;4708</span>
+                        <i class="fa fa-heart"></i>
+                        <span class="f10"> &nbsp;1510</span>
+                        <div class="cover-yh">
+                            <a href="mem632475" data-container="body" data-toggle="popover" data-placement="top" data-content="姜闹钟" data-original-title="" title="">
+                                <i class="fa fa-user-secret"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pc-g-footer">
+        <div class="l-wrapper">
+            <div class="pc-g-footer-contact">
+                <h2 class="pc-g-footer-title">联系我们</h2>
+                <ul class="pc-mod-content-list">
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first pc-mod-content-item-time">服务时间</span>
+                        <span>(工作日 09:30-18:30)</span>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first">技术支持邮箱</span>
+                        <a href="mailto:5526555@qq.com">5526555@qq.com</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first">业务咨询</span>
+                        <span>400-007-6003</span>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first">市场合作</span>
+                        <span>0571-26288882</span>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first">项目经理</span>
+                        <span>13666688448</span>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <span class="pc-mod-content-item-first">请拨打两次电话(广告骚扰太多)</span>
+                    </li>
+                    <!-- <li class="pc-mod-content-item scale-weixin">
+                        <span class="pc-mod-content-item-first">微信公众号:</span>
+                        <span class="qcode">7天时间清单</span>
+                        <img class="pc-mod-qr-code" alt="公众号:7天时间清单" title="公众号:7天时间清单" width="162" src="qrcode.jpg">
+                    </li> -->
+                </ul>
+            </div>
+            <div class="pc-g-footer-developer">
+                <h2 class="pc-g-footer-title">开发者服务</h2>
+                <ul class="pc-mod-content-list">
+                    <li class="pc-mod-content-item">
+                        <a href="#" target="_blank">付费充值</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="https://github.com/thinkido/editor.md" target="_blank">思维导图marmkdown版</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="https://github.com/thinkido/markdownUploader" target="_blank">文件上传markdown</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="#">tlog程序员专用</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="//7dtime.com/mdteach/" target="_blank">系统使用教程</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="//7dtime.com/api/">第三方开发支持</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pc-g-footer-about">
+                <h2 class="pc-g-footer-title">关于我们</h2>
+                <ul class="pc-mod-content-list">
+                    <li class="pc-mod-content-item">
+                        <a href="/aboutus/info.html">公司简介</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="/aboutus/contact.html">联系方式</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="/aboutus/join.html">加入我们</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="/aboutus/vision.html">企业使命</a>
+                    </li>
+                    <li class="pc-mod-content-item">
+                        <a href="/aboutus/rule.html">行为准则</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pc-mod-footer-certification">
+                <h2 class="pc-g-footer-title">资质认证</h2>
+                <ul class="pc-mod-content-list">
+                    <li class="pc-mod-content-item quality-qa">
+                        <p>软件著作权</p>
+                    </li>
+                    <li class="pc-mod-content-item quality-qa">
+                        <p>2006年获
+                            <<时代周刊>>风云人物</p>
+                    </li>
+                    <li class="pc-mod-content-item quality-qa">
+                        <p>2008年获
+                            <<感动中国>>特别奖</p>
+                    </li>
+                    <li class="pc-mod-content-item safty-qa">
+                        <p>微信公众号:7天时间清单</p>
+                    </li>
+                </ul>
+                <img class="pc-mod-qr-code" alt="公众号:7天时间清单" title="公众号:7天时间清单" width="162" src="https://cdns.7dtime.com/z39/index/qrcode.jpg">
+                <!--
+                 <div class="pc-mod-footer-weixin">融云公众号</div>
+                    <div class="pc-mod-footer-weibo">
+                        <a href="http://weibo.com/rongcloud" target="_blank">官方微博</a>
+                    </div> -->
+            </div>
+        </div>
+        <div class="pc-g-footer-copyright">
+            <p class="l-column-left">Copyright 2014-2018 7dtime.com</p>
+            <a class="l-column-left pc-g-record-number" target="_blank" href="#"></a>
+            <a class="l-column-left" target="_blank" href="http://www.miitbeian.gov.cn/">备案号 浙ICP备15002753号</a>
+        </div>
+        <div class="footernew footheight" style="width:1000px;" bosszone="footer">
+            <div style="display:  flex;justify-content:  center;">
+                <p>
+                    <span style="width:44px;" class="fl"><a href="http://www.12377.cn/" target="_blank" rel="nofollow"><img width="44" height="44" border="0" alt="中国互联网举报中心" src="http://mat1.gtimg.com/www/images/qq2012/buliang.png"></a></span>
+                    <span class="fr"><a class="lcblack" href="http://www.12377.cn/" target="_blank" rel="nofollow">中国互联网<br>举报中心</a></span>
+                </p>
+                <p>
+                    <span style="width:44px;" class="fl"><a href="http://www.wenming.cn" target="_blank" rel="nofollow"><img width="44" height="42" border="0" alt="中国文明网传播文明" src="http://mat1.qq.com/www/images/allskin/wmlogo.gif"></a></span>
+                    <span class="fr"><a class="lcblack" href="http://www.wenming.cn" target="_blank" rel="nofollow">中国文明网<br>传播文明</a></span>
+                </p>
+                <p>
+                    <a href="http://webscan.360.cn/index/checkwebsite/url/7dtime.com"><img border="0" src="http://webscan.360.cn/status/pai/hash/4e607de2b6a70c0ad05b887d6b50607d"/></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+    var mySwiper = new Swiper('#bannerSwiper', {
+        loop: true,
+        speed: 1000,
+        grabCursor: true,
+        parallax: true,
+        autoplay: {
+            delay: 5000,
+        },
+        pagination: {
+            el: '#bannerpagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.arrow-right',
+            prevEl: '.arrow-left',
+        },
+    });
 
-	<script type="text/javascript">
-		$(function () {
-			$('.qrcodeApp').qrcode("http://ai.7dtime.com/aiPhone.apk");
-		})
-	</script>
-	<script>
-	var _hmt = _hmt || [];
-	(function() {
-	  var hm = document.createElement("script");
-	  hm.src = "https://hm.baidu.com/hm.js?630e303b798561ae2892f274e1d6656a";
-	  var s = document.getElementsByTagName("script")[0]; 
-	  s.parentNode.insertBefore(hm, s);
-	})();
-	</script>
-
+    function lazyLoadDemos() {
+        $('.phone-box').each(function() {
+            var frameHolder = $(this);
+            if (frameHolder.hasClass('loaded')) return;
+            var frame = frameHolder.find('iframe');
+            var src = frame.attr('data-src');
+            if (frameHolder.offset().top < ($(window).scrollTop() + $(window).height() + 50)) {
+                frameHolder.addClass('loaded');
+                frame.attr('src', src);
+            }
+        });
+    }
+    if ($('.phone-box').length > 0) {
+        $('.phone-box').each(function() {
+            var t = $(this);
+            var demoFile = t.find('iframe').attr('data-src');
+        });
+        $(window).on('scroll resize',
+            function() {
+                lazyLoadDemos();
+            });
+        lazyLoadDemos();
+    }
+    /*添加JS*/
+    $(".downItem").mouseover(function() {
+        $(this).find('.ewm').show();
+    });
+    $(".downItem .ewm").mouseout(function() {
+        $(this).hide();
+    });
+    </script>
 </body>
+
 </html>
