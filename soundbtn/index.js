@@ -447,7 +447,7 @@ $(function () {
             _showMsg("点击的按钮名称是：" + button_name);
         },
         onJoyStickEnd: function (now_stick_angle, dis, now_stick_postion) {
-            console.log('onJoyStickEnd', now_stick_angle, dis) // ,now_stick_postion
+            console.log('onJoyStickEnd', now_stick_angle, dis , window.end_event ) // ,now_stick_postion
             handleVoiceUp( now_stick_angle, dis )
         },
         onJoyStickStart: function (event) {
@@ -480,12 +480,12 @@ $(function () {
     richText.x = 0;
     richText.y = 0;
     var copyRightText = new PIXI.Text('by 时间清单 ai.7dtime.com',style1);
-    copyRightText.x = (widthWindow - copyRightText.width) /2 , copyRightText.y = heightWindow - 30 ;
+    copyRightText.x = Math.ceil ( (widthWindow - copyRightText.width) /2 ) , copyRightText.y = heightWindow - 30 ;
 
 
     game_stage.interactive = true;
     game_stage.buttonMode = true;
-    game_stage.hitArea = new PIXI.Rectangle(0, 0, widthWindow, heightWindow);
+    game_stage.hitArea = new PIXI.Rectangle(0, 80, widthWindow, heightWindow);
     game_stage.on("mousedown", changePostion).on('touchstart',changePostion) ;
     game_stage.on("mouseup", delayResetPostion).on('touchend',delayResetPostion) ;
 
@@ -714,7 +714,7 @@ $(function () {
         }
     }
     function checkTouchMoveBtn(angle, dis) {
-         if( dis < 80 ) return ;
+         if( dis == null || dis < 80 ) return ;
          // [0,1,2,3,4,5,6,7].map(i=> 22.5+45*i) 
          if( angle > 337.5 || angle <= 22.5 ) return 'rightBtn';     
          else if( angle > 292.5 && angle <= 337.5 ) return'downRightBtn';     
