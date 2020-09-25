@@ -695,7 +695,7 @@ $(function () {
         else  if( btn == 'upLeftBtn' ) ext = { preEnter:1 , prefix : '- '} ;
         else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
         else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
-        else  if( btn == 'downRightBtn' ) ext = { preEnter:1 , prefix : '---' , doEnter : 1} ;
+        else  if( btn == 'downRightBtn' ) ext = { preEnter:1 , prefix : '---\n' , doEnter : 1} ;
         else ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
         return ext ;
     }
