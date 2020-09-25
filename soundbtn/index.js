@@ -5,6 +5,7 @@ let url = `http://${baseUrl}/text/input`; //win10
 let lastText , widthWindow ,heightWindow ;
 // 语音波动动画
 var siriWave  ;
+var _joy_pad , game_stage;
 
 $(function () {
     widthWindow = $(window).width();
@@ -26,9 +27,8 @@ $(function () {
     checkAlive(true) ; //检查服务器是否配置成功。
 
     var offsetY = 110; // 116 ;
-    let centerX = widthWindow/2 ;
-    let centerY =  heightWindow/2 ;
-    let joyY = heightWindow - 170 - 50  ; // 
+    let initJoyX = widthWindow/2 ; // centerX ;
+    let initJoyY = heightWindow - 170 - 50  ; // 
     GameOptions = {
         width: widthWindow  // 800 //游戏屏幕的高度。 
         , height: heightWindow //  600 //游戏屏幕的宽度。
@@ -50,8 +50,8 @@ $(function () {
             joy_pad_background: "img/joy_bg.png"//摇杆的背景。
             , joy_pad_joystick: "img/Button_active.png" //摇杆正体。
             // , joy_pad_joystick: "img/RadialJoy_Area.png" //摇杆正体。
-            , joy_pad_x: centerX  // 180 //摇杆的坐标
-            , joy_pad_y: joyY // 280 - offsetY //摇杆的y坐标  
+            , joy_pad_x: initJoyX  // 180 //摇杆的坐标
+            , joy_pad_y: initJoyY // 280 - offsetY //摇杆的y坐标  
             //--注意，所有缩放的尺寸都是按照unitiy3d获得的这些摇杆素材来设置的，假如替换了texture，请重新设置缩放尺寸。
             , joy_pad_background_scale: {
                 x: 0.5
@@ -399,21 +399,21 @@ $(function () {
             this.texture = textureButton;
         }
 
+        // 使用修改定位后就屏蔽了这些逻辑，这里基本无用了。
+        // button.on('mousedown', onButtonDown)
+        //     .on('touchstart', onButtonDown)
 
-        button.on('mousedown', onButtonDown)
-            .on('touchstart', onButtonDown)
+        //     // set the mouseup and touchend callback...
+        //     .on('mouseup', onButtonUp)
+        //     .on('touchend', onButtonUp)
+        //     .on('mouseupoutside', onButtonUp)
+        //     .on('touchendoutside', onButtonUp)
 
-            // set the mouseup and touchend callback...
-            .on('mouseup', onButtonUp)
-            .on('touchend', onButtonUp)
-            .on('mouseupoutside', onButtonUp)
-            .on('touchendoutside', onButtonUp)
+        //     // set the mouseover callback...
+        //     .on('mouseover', onButtonOver)
 
-            // set the mouseover callback...
-            .on('mouseover', onButtonOver)
-
-            // set the mouseout callback...
-            .on('mouseout', onButtonOut);
+        //     // set the mouseout callback...
+        //     .on('mouseout', onButtonOut);
 
 
         // you can also listen to click and tap events :
@@ -433,9 +433,9 @@ $(function () {
 
     var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height, { backgroundColor: 0x63ADD0, transparent: !1 });
     //var game_renderer = PIXI.autoDetectRenderer(GameOptions.width, GameOptions.height);
-    var game_stage = new PIXI.Container(0x66FF99);
+    game_stage = new PIXI.Container(0x66FF99);
     $("#game").append(game_renderer.view);
-    var _joy_pad = new GameJoyPad(game_stage, {
+    _joy_pad = new GameJoyPad(game_stage, {
         //--摇杆摇动角度变换时候的回调函数。
         onJoyStickMove: function (now_stick_angle, dis, now_stick_postion) {
             // console.log('position:', dis, now_stick_postion);
@@ -472,6 +472,39 @@ $(function () {
     var richText = new PIXI.Text('Rich text with a lot of options and across multiple lines', style);
     richText.x = 0;
     richText.y = 0;
+
+
+    game_stage.interactive = true;
+    game_stage.buttonMode = true;
+    game_stage.hitArea = new PIXI.Rectangle(0, 0, widthWindow, heightWindow);
+    game_stage.on("mousedown", changePostion).on('touchstart',changePostion) ;
+    game_stage.on("mouseup", delayResetPostion).on('touchend',delayResetPostion) ;
+
+    // 重新设置手柄位置。
+    function changePostion(event) {
+        console.log('changePostion' , event.data.global );
+        _joy_pad.joy_pad_container.position.x = event.data.global.x ;
+        _joy_pad.joy_pad_container.position.y = event.data.global.y ;
+        _joy_pad.settings.joy_pad_x = event.data.global.x ;
+        _joy_pad.settings.joy_pad_y = event.data.global.y ;
+        _joy_pad.joy_pad_container.emit("touchstart",event)
+        if( resetId ) clearTimeout(resetId) , resetId = null ;
+    }
+    var resetId ;
+    function delayResetPostion(event){
+        console.log('delayResetPostion' , event.data.global );
+        _joy_pad.joy_pad_container.emit("touchend",event)
+        if( resetId ) clearTimeout(resetId) , resetId = null ;
+        resetId = setTimeout( resetPostion , 5000);
+    }
+    function resetPostion(){
+        console.log('resetPostion' );
+        _joy_pad.joy_pad_container.position.x = initJoyX ;
+        _joy_pad.joy_pad_container.position.y = initJoyY ;
+        _joy_pad.settings.joy_pad_x = initJoyX ;
+        _joy_pad.settings.joy_pad_y = initJoyY ;
+    }
+
 
     // game_stage.addChild(richText);
     function game_animate() {
