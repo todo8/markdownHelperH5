@@ -1,6 +1,6 @@
 var GameOption;
 
-let baseUrl = window.localStorage.baseUrl || '192.168.1.105:8088';
+let baseUrl = window.localStorage.baseUrl || '192.168.1.101:8088';
 let url = `http://${baseUrl}/text/input`; //win10
 let lastText , widthWindow ,heightWindow ;
 // 语音波动动画
@@ -496,6 +496,16 @@ $(function () {
         if( res == null) {
             new Howl({ src: ['res/404.mp3'] }).play(); //无法连接
             setConfigPC()
+            $.Toast('请确定已启动电脑端程序:',`${url}`,'error', {
+                    stack: true,
+                    has_icon:true,
+                    has_close_btn:true,
+                    fullscreen:false,
+                    timeout:4000,
+                    sticky:false,
+                    // has_progress:true,
+                    rtl:false,
+                })
             return 
         }
         if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
@@ -505,50 +515,20 @@ $(function () {
     function setConfigPC(){
         let tempIP = baseUrl.split(':')[0] ; // baseUrl.substr(0,12) ;
         prompt({
-        title: '填入电脑上的ip地址：',
-        negative: '取消',
-        positive: '确定',
-        placeholder: baseUrl , // '192.168.1.105:8088',
-        defaultValue: tempIP  , 
-        callback: function(input) {
-            if( !input ) return console.error('取消了输入') ;
-            let [ ip , port ] = input.split(':') ;
-            ip = ip || '192.168.1.105' , port = port || '8088' ;
-            baseUrl = `${ip.trim()}:${port.trim()}` ;
-            url = `http://${baseUrl}/text/input`;
-            checkAlive( true );
-        }
-    });
-    }
-    function setConfigPC2(){
-        jqalert({
-            title:'提示',
-            prompt:'填入配对电脑的ip：',
-            defaultText:'192.168.1.10',
-            placeholder:'192.168.1.105:8088',
-            yestext:'提交',
-            notext:'取消',
-            yesfn:function () {
+            title: '填入电脑上的ip地址：',
+            negative: '取消',
+            positive: '确定',
+            placeholder: baseUrl , // '192.168.1.105:8088',
+            defaultValue: tempIP  , 
+            callback: function(input) {
                 if( !input ) return console.error('取消了输入') ;
                 let [ ip , port ] = input.split(':') ;
-                ip = ip || '192.168.1.105' , port = port || '8088' ;
-                baseUrl = `${ip}:${port}` ;
+                ip = ip || '192.168.1.101' , port = port || '8088' ;
+                baseUrl = `${ip.trim()}:${port.trim()}` ;
                 url = `http://${baseUrl}/text/input`;
                 checkAlive( true );
-            },
-            nofn:function () {
-                jqtoast('您已放弃配对电脑');
             }
-        })
-    }
-    function setConfigPC1(){
-        var input = prompt("填入电脑上的ip地址：",'192.168.1.10');
-        if( !input ) return console.error('取消了输入') ;
-        let [ ip , port ] = input.split(':') ;
-        ip = ip || '192.168.1.105' , port = port || '8088' ;
-        baseUrl = `${ip}:${port}` ;
-        url = `http://${baseUrl}/text/input`;
-        checkAlive( true );
+        });
     }
     async function sendText( sdata , mute) {
         let params , { text , origin , action , doEnter, preEnter ,doDelete , prefix , postfix , wrapper } = sdata || {} ;
