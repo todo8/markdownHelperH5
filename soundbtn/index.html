@@ -72,6 +72,12 @@
             width: 100%;
             text-align: center;
             pointer-events: none;
+            -webkit-touch-callout:none;
+            -webkit-user-select:none;
+            -khtml-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
         }
 
         /*#game { background-color: rgba(0, 0, 0, 0.9); }
@@ -81,7 +87,7 @@
         <div class="textWrapper"><textarea class="voice-txt" rows="3" readonly  placeholder='语音自动识别后发到电脑上，代替键盘打字。AI动态修复文字。按住麦克风滑向不同8个方向有不同快捷键。'></textarea></div>
         <div id="game"></div>
         <div id="siri-container"></div>
-        <div class="copyright" >by 时间清单 ai.7dtime.com</div>
+        <!-- <div class="copyright" >by 时间清单 ai.7dtime.com</div> -->
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/prompt.js"></script>
@@ -89,7 +95,6 @@
     <script src="js/migrate.js"></script>
     <!-- <script src="js/Box2dWeb-2.1.a.3.min.js"></script> -->
     <script src="js/pixi.min.js"></script>
-    <!-- <script src="js/pixi.js"></script> -->
     <script src="js/axios.min.js"></script>
     <script src="js/howler.min.js"></script>
     <script src="js/siriwave.umd.min.js"></script>

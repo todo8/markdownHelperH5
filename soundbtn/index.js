@@ -458,7 +458,7 @@ $(function () {
     });
     var style = {
         font: 'bold italic 20px Arial',
-        fill: '#F7EDCA',
+        fill: '#000000',
         stroke: '#4a1850',
         //strokeThickness : 5,
         //dropShadow : true,
@@ -468,10 +468,19 @@ $(function () {
         wordWrap: true,
         wordWrapWidth: 300
     };
+    var style1 = {
+        font: 'bold 20px Arial',
+        fill: '#000000',
+        stroke: '#4a1850',
+        wordWrap: true,
+        wordWrapWidth: 300
+    };
 
     var richText = new PIXI.Text('Rich text with a lot of options and across multiple lines', style);
     richText.x = 0;
     richText.y = 0;
+    var copyRightText = new PIXI.Text('by 时间清单 ai.7dtime.com',style1);
+    copyRightText.x = (widthWindow - copyRightText.width) /2 , copyRightText.y = heightWindow - 30 ;
 
 
     game_stage.interactive = true;
@@ -482,7 +491,7 @@ $(function () {
 
     // 重新设置手柄位置。
     function changePostion(event) {
-        console.log('changePostion' , event.data.global );
+        // console.log('changePostion' , event.data.global );
         _joy_pad.joy_pad_container.position.x = event.data.global.x ;
         _joy_pad.joy_pad_container.position.y = event.data.global.y ;
         _joy_pad.settings.joy_pad_x = event.data.global.x ;
@@ -492,13 +501,13 @@ $(function () {
     }
     var resetId ;
     function delayResetPostion(event){
-        console.log('delayResetPostion' , event.data.global );
+        // console.log('delayResetPostion' , event.data.global );
         _joy_pad.joy_pad_container.emit("touchend",event)
         if( resetId ) clearTimeout(resetId) , resetId = null ;
         resetId = setTimeout( resetPostion , 5000);
     }
     function resetPostion(){
-        console.log('resetPostion' );
+        // console.log('resetPostion' );
         _joy_pad.joy_pad_container.position.x = initJoyX ;
         _joy_pad.joy_pad_container.position.y = initJoyY ;
         _joy_pad.settings.joy_pad_x = initJoyX ;
@@ -507,6 +516,7 @@ $(function () {
 
 
     // game_stage.addChild(richText);
+    game_stage.addChild(copyRightText);
     function game_animate() {
 
         requestAnimationFrame(game_animate);
