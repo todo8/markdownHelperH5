@@ -3,14 +3,25 @@ var GameOption;
 let baseUrl = window.localStorage.baseUrl || '192.168.1.101:8088';
 let url = `http://${baseUrl}/text/input`; //win10
 let lastText , widthWindow ,heightWindow ;
+let isTouchEnd ;
 // 语音波动动画
 var siriWave  ;
 var _joy_pad , game_stage;
+let touchX, touchY ;
+
+function initUseage( type ){
+    // \n当前网络：ip ，wifi : xxx ;
+    let dic = { setup : '使用说明：1、电脑下载运行AI麦克风；2、手机App输入提示的电脑IP，进行配对；' 
+    , use : '语音自动识别后发到电脑上，代替键盘打字。AI动态修复文字。按住麦克风滑向不同8个方向有不同快捷键。' }
+    type = type  || 'setup' ;
+    let str = dic[ type ] ;
+    $('.voice-txt').attr("placeholder", str );
+}
 
 $(function () {
     widthWindow = $(window).width();
     heightWindow = $(window).height();
-    
+
     $('.voice-txt').css('border-radius','8px')
     $('.voice-txt').css('margin','8px')
     $('.voice-txt').css('padding','8px')
@@ -24,6 +35,7 @@ $(function () {
         width: widthWindow,
     });
     siriWave.stop()
+    initUseage('setup');
     checkAlive(true) ; //检查服务器是否配置成功。
 
     var offsetY = 110; // 116 ;
@@ -215,8 +227,11 @@ $(function () {
             me.settings.onJoyStickMove(_stick_angle, dis, _center_point);
         };
         function calc_angle_distance(newPosition) {
-            var _side_length_y = newPosition.y - me.settings.joy_pad_y;
-            var _side_length_x = newPosition.x - me.settings.joy_pad_x;
+            // var _side_length_y = newPosition.y - me.settings.joy_pad_y;
+            // var _side_length_x = newPosition.x - me.settings.joy_pad_x; // 触摸和界面分离
+            var _side_length_y = newPosition.y - touchY;
+            var _side_length_x = newPosition.x - touchX;
+
             if (_side_length_x == 0 && _side_length_y == 0) return {};
             _side_length_y = Math.ceil(_side_length_y), _side_length_x = Math.ceil(_side_length_x);
 
@@ -491,27 +506,36 @@ $(function () {
 
     // 重新设置手柄位置。
     function changePostion(event) {
+        isTouchEnd = false ;
         // console.log('changePostion' , event.data.global );
-        _joy_pad.joy_pad_container.position.x = event.data.global.x ;
-        _joy_pad.joy_pad_container.position.y = event.data.global.y ;
-        _joy_pad.settings.joy_pad_x = event.data.global.x ;
-        _joy_pad.settings.joy_pad_y = event.data.global.y ;
+        // _joy_pad.joy_pad_container.position.x = event.data.global.x ;
+        // _joy_pad.joy_pad_container.position.y = event.data.global.y ;
+        // _joy_pad.settings.joy_pad_x = event.data.global.x ;
+        // _joy_pad.settings.joy_pad_y = event.data.global.y ;
+        touchX = event.data.global.x , touchY = event.data.global.y ;
         _joy_pad.joy_pad_container.emit("touchstart",event)
-        if( resetId ) clearTimeout(resetId) , resetId = null ;
+        if( resetId ) clearTimeout(resetId) , resetId = null ; //直接手柄位置复原
+        if( warnId ) clearTimeout(warnId) , warnId = null ; //60秒的最后5秒提示。
+        warnId = setTimeout( second55_warn , 55000);
     }
-    var resetId ;
+    var resetId , warnId ;
     function delayResetPostion(event){
+        isTouchEnd = true ;
         // console.log('delayResetPostion' , event.data.global );
         _joy_pad.joy_pad_container.emit("touchend",event)
         if( resetId ) clearTimeout(resetId) , resetId = null ;
+        if( warnId ) clearTimeout(warnId) , warnId = null ;
         resetId = setTimeout( resetPostion , 5000);
     }
+    function second55_warn(){
+        new Howl({ src: ['res/warn.mp3']   ,volume: 0.3}).play(); 
+    }
     function resetPostion(){
-        // console.log('resetPostion' );
-        _joy_pad.joy_pad_container.position.x = initJoyX ;
-        _joy_pad.joy_pad_container.position.y = initJoyY ;
-        _joy_pad.settings.joy_pad_x = initJoyX ;
-        _joy_pad.settings.joy_pad_y = initJoyY ;
+        // console.log('resetPostion' );        
+        // _joy_pad.joy_pad_container.position.x = initJoyX ;
+        // _joy_pad.joy_pad_container.position.y = initJoyY ;
+        // _joy_pad.settings.joy_pad_x = initJoyX ;
+        // _joy_pad.settings.joy_pad_y = initJoyY ;
     }
 
 
@@ -533,6 +557,7 @@ $(function () {
     }
 
 })
+
     //检查服务器是否配置成功。
     async function checkAlive( showSuccess ) {
         let res = await axios.get(url, { timeout: 1000 }).then(d => d.data).catch(e => { });
@@ -552,7 +577,8 @@ $(function () {
             return 
         }
         if( showSuccess ) new Howl({ src: ['res/done.mp3'] }).play();
-        window.localStorage.baseUrl = baseUrl ;
+        window.localStorage.baseUrl = baseUrl ;        
+        initUseage('use');
         console.log('checkAlive' , !!res )
     }
     function setConfigPC(){
@@ -640,7 +666,8 @@ $(function () {
                 let { data: text , origin , pgs , is_last } = res ;
                 let  action = res.pgs == 'rpl' ? 'replace' : 'append' ;
                 console.log('handleVoiceResult sendText ' , origin && origin == lastText , origin == lastText , origin , lastText  , text)
-                if( is_last || ( origin && origin == lastText )) { 
+                sendVibrate(30)
+                if( isTouchEnd && ( is_last || ( origin && origin == lastText ))) { // 追加：识别语音结束且和之前内容相同
                     var immediately = !!is_last ;
                     let ext = soundDic[currSoundId] || {} ;
                     delaySend( Object.assign( { text , origin , action } , ext ) , true , immediately);
@@ -729,12 +756,12 @@ $(function () {
          // else if( angle > 225 && angle <= 315 ) return 'downBtn';
          // else  return 'rightBtn';
     }
-    function transParams(btn){
+    function transParams(btn, dis ){
         let ext = {} ;
         if(!btn) ext = {} ;
         else if( btn == 'upBtn' ) ext = { doDelete : 1} ;
         else if( btn == 'leftBtn' ) ext = { preEnter:1 , prefix : '## ' ,doEnter : 1} ;
-        else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
+        else if( btn == 'downBtn' ) ext = { doEnter : dis >350 ? 2 : 1 } ;
         else  if( btn == 'upLeftBtn' ) ext = { preEnter:1 , prefix : '- '} ;
         else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
         else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
@@ -746,7 +773,7 @@ $(function () {
     let soundDic = {} ;
     function handleVoiceMove( angle, dis ) {
         let btn = checkTouchMoveBtn( angle, dis );
-        let ext =  transParams(btn) ;
+        let ext =  transParams(btn, dis ) ;
         let soundMp3 = 'res/done.mp3' ;   // right = 角度为0，逆时针方向旋转
         if( lastBtn != btn ) {
             if( btn == 'upBtn' ) soundMp3 = 'res/upBtn.mp3' ;
@@ -768,9 +795,9 @@ $(function () {
      */
     function handleVoiceUp(angle, dis) {
         let btn = checkTouchMoveBtn( angle, dis );
-        let ext =  transParams(btn) ;
+        let ext =  transParams(btn ,dis ) ;
         if( btn ) soundDic[currSoundId] = ext ;
-        console.log('btn' , btn , lastBtn , ext);
+        console.log('btn' , btn , lastBtn , ext , dis );
         lastBtn = null ;
         try {
             siriWave.stop()

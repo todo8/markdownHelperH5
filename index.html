@@ -24,12 +24,15 @@
     <link href="https://cdns.7dtime.com/z39/index/templets/default/style/layout.css" rel="stylesheet" type="text/css" />
     <link href="https://cdns.7dtime.com/z39/index/css/swiper.min.css" rel="stylesheet" type="text/css" />
     <!--<link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/7day.css">-->
-    <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/7day2.css">
+    <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/7day2.css">    
+    <link rel="stylesheet" href="h5/css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="h5/css/toast.style.min.css" type="text/css">
     <link rel="stylesheet" href="https://cdns.7dtime.com/z39/index/css/font-awesome.min.css" />
-    <script src="https://cdns.7dtime.com/z39/index/templets/default/js/jquery-1.10.1.min.js"></script>
+    <!-- <script src="https://cdns.7dtime.com/z39/index/templets/default/js/jquery-1.10.1.min.js"></script> -->
     <script src="https://cdns.7dtime.com/z39/index/js/swiper.mine.js?v=407"></script>
     <script type="text/javascript"></script>
     <style>
+        .prompt { z-index: 1000 }
         .col-lg-4 {
             width: 22.8%;
         }
@@ -163,7 +166,7 @@
                     <div style="font-size: 16px;padding-left: 40px;">
                         <div>1、下载电脑端exe并安装； </div>
                         <div>2、安卓手机扫码下载app； </div>
-                        <div>3、启动电脑端；打开App；App中输入电脑IP；</div>
+                        <div>3、启动电脑端；打开App；App中输入电脑IP；<span class="ipInfo" style="display: none; color: red;font-size: 30px" ></span><span class="ipDesc" style="color: red;" >需要手机和电脑在同一个局域网Wifi内。</span></div>
                         <div>4、按住麦克风说话，放开按钮立刻输入电脑。</div>
                     </div>
                 </div>
@@ -295,10 +298,10 @@
                     </div>
                     <div class="col-lg-4 col-md-3 col-sm-4 downItem">
                         <a href="https://typora.io/" target="_blank">
-                            <img style="max-height: 172px;width: 172px; margin-left: 45px;" src="https://img2020.cnblogs.com/blog/2004895/202005/2004895-20200529220257737-2097635244.jpg"></a>
+                            <img style="max-height: 172px;width: 172px; margin-left: 45px;" src="http://cdn.7dtime.com/other/typora.jpg"></a>
                         <div class="cover-info">
                             <a href="https://typora.io/" target="_blank">
-                                <h4>推荐Markdown编辑器：typera</h4>
+                                <h4>推荐Markdown编辑器：typora</h4>
                             </a>
                             <small>Typora 是一款支持实时预览的Markdown 文本编辑器。它有OS X、Windows、Linux 三个平台的版本</small></div>
                         <div class="cover-fields">
@@ -436,6 +439,9 @@
             </div>
         </div>
     </div>
+
+    <script src="./h5/js/jquery.min.js"></script>
+    <script src="./h5/js/prompt.js"></script>
     <script>
     var mySwiper = new Swiper('#bannerSwiper', {
         loop: true,
@@ -485,6 +491,29 @@
     $(".downItem .ewm").mouseout(function() {
         $(this).hide();
     });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    $(function () {
+        let baseUrl = getUrlParam('ip');
+        if(baseUrl) {
+            let [tempIP , port ] = baseUrl.split(':') ;
+            $('.ipInfo').show();
+            $('.ipInfo').text(tempIP + '，')
+            prompt({
+            title: '手机App中填入电脑IP：',
+            negative: '取消',
+            positive: '确定',
+            placeholder: baseUrl , // '192.168.1.105:8088',
+            defaultValue: tempIP  , 
+            callback: function(input) {
+                if( !input ) return console.error('取消了输入') ;
+            }
+        });
+        }
+    })
     </script>
     <script>
     var _hmt = _hmt || [];
