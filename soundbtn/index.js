@@ -21,7 +21,7 @@ function initUseage( type ){
 $(function () {
     widthWindow = $(window).width();
     heightWindow = $(window).height();
-    $('#siri-container').show()
+    // $('#siri-container').show()
     
     var options = {
       id: 'top-progress-bar',
@@ -740,7 +740,7 @@ $(function () {
                 res = typeof res == 'string' ? JSON.parse(res) : res
                 if (0 != res.return_code) {
                     siriWave.stop()
-                    // $('#siri-container').hide()
+                    $('#siri-container').hide()
                     launchHandleToast('错误代码：' + res.return_code)
                     return
                 }
@@ -749,7 +749,7 @@ $(function () {
         } catch (e) {
             siriWave.stop()
             console.error(e.message)
-            // $('#siri-container').hide()
+            $('#siri-container').hide()
         }
     }
     function checkTouchMoveBtn(angle, dis) {
@@ -813,7 +813,7 @@ $(function () {
         lastBtn = null ;
         try {
             siriWave.stop()
-            // $('#siri-container').hide()
+            $('#siri-container').hide()
             // sendText({ text: $('.voice-txt').val() })
             delaySend( Object.assign(  { text: $('.voice-txt').val() }  , ext ) ) ;
             if (!window.WebViewJavascriptBridge) {
