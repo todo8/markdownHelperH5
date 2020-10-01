@@ -786,7 +786,9 @@ $(function () {
     function handleVoiceMove( angle, dis ) {
         let btn = checkTouchMoveBtn( angle, dis );
         let ext =  transParams(btn, dis ) ;
-        let soundMp3 = 'res/done.mp3' ;   // right = 角度为0，逆时针方向旋转
+        let volume , soundMp3 = 'res/done.mp3' ;   // right = 角度为0，逆时针方向旋转
+        if( btn == 'downBtn' && ext.doEnter == 2 ) btn = 'downBtn2'  ;
+            
         if( lastBtn != btn ) {
             if( btn == 'upBtn' ) soundMp3 = 'res/upBtn.mp3' ;
             if( btn == 'leftBtn' ) soundMp3 = 'res/leftBtn.mp3' ;
@@ -796,7 +798,10 @@ $(function () {
             if( btn == 'downLeftBtn' ) soundMp3 = 'res/ding.mp3' ;
             if( btn == 'downRightBtn' ) soundMp3 = 'res/ding.mp3' ;
             if( btn == 'upRightBtn' ) soundMp3 = 'res/ding.mp3' ;
-            btn && new Howl({ src: [soundMp3] ,volume: 0.1 }).play();
+
+            if( btn == 'downBtn2') soundMp3 = 'res/enter2.mp3' , volume = 0.4 ; //2个回车的音效。
+
+            btn && new Howl({ src: [soundMp3] ,volume: volume || 0.1 }).play();
             sendVibrate(50)
             // console.log('btn' , angle , btn , lastBtn , ext , lastBtn == btn );
         }
