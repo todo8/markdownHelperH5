@@ -8,7 +8,7 @@ let isTouchEnd ;
 var siriWave  ;
 var _joy_pad , game_stage;
 let touchX, touchY ;
-
+let progressBar ;
 function initUseage( type ){
     // \n当前网络：ip ，wifi : xxx ;
     let dic = { setup : '使用说明：1、电脑下载运行AI麦克风；2、手机App输入提示的电脑IP，进行配对；' 
@@ -21,6 +21,15 @@ function initUseage( type ){
 $(function () {
     widthWindow = $(window).width();
     heightWindow = $(window).height();
+    $('#siri-container').show()
+    
+    var options = {
+      id: 'top-progress-bar',
+      color: '#F44336',
+      height: '2px',
+      duration: 60
+    }
+    progressBar = new ToProgress(options);
 
     $('.voice-txt').css('border-radius','8px')
     $('.voice-txt').css('margin','8px')
@@ -517,6 +526,8 @@ $(function () {
         if( resetId ) clearTimeout(resetId) , resetId = null ; //直接手柄位置复原
         if( warnId ) clearTimeout(warnId) , warnId = null ; //60秒的最后5秒提示。
         warnId = setTimeout( second55_warn , 55000);
+        progressBar.reset();
+        progressBar.increase(100);
     }
     var resetId , warnId ;
     function delayResetPostion(event){
@@ -526,6 +537,7 @@ $(function () {
         if( resetId ) clearTimeout(resetId) , resetId = null ;
         if( warnId ) clearTimeout(warnId) , warnId = null ;
         resetId = setTimeout( resetPostion , 5000);
+        progressBar.reset();
     }
     function second55_warn(){
         new Howl({ src: ['res/warn.mp3']   ,volume: 0.3}).play(); 
@@ -728,7 +740,7 @@ $(function () {
                 res = typeof res == 'string' ? JSON.parse(res) : res
                 if (0 != res.return_code) {
                     siriWave.stop()
-                    $('#siri-container').hide()
+                    // $('#siri-container').hide()
                     launchHandleToast('错误代码：' + res.return_code)
                     return
                 }
@@ -737,7 +749,7 @@ $(function () {
         } catch (e) {
             siriWave.stop()
             console.error(e.message)
-            $('#siri-container').hide()
+            // $('#siri-container').hide()
         }
     }
     function checkTouchMoveBtn(angle, dis) {
@@ -801,7 +813,7 @@ $(function () {
         lastBtn = null ;
         try {
             siriWave.stop()
-            $('#siri-container').hide()
+            // $('#siri-container').hide()
             // sendText({ text: $('.voice-txt').val() })
             delaySend( Object.assign(  { text: $('.voice-txt').val() }  , ext ) ) ;
             if (!window.WebViewJavascriptBridge) {
