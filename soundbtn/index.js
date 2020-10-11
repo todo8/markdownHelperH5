@@ -572,11 +572,11 @@ $(function () {
 
     //检查服务器是否配置成功。
     async function checkAlive( showSuccess ) {
-        let res = await axios.get(url, { timeout: 1000 }).then(d => d.data).catch(e => { });
+        let res = await axios.get(url, { timeout: 10000 }).then(d => d.data).catch(e => { });
         if( res == null) {
             new Howl({ src: ['res/404.mp3'] }).play(); //无法连接
             setConfigPC()
-            $.Toast('请确定已启动电脑端程序:',`${url}`,'error', {
+            $.Toast('请确定已启动电脑端程序:','手机息屏可能自动断开wifi,重连15秒后生效','error', {
                     stack: true,
                     has_icon:true,
                     has_close_btn:true,
@@ -757,12 +757,13 @@ $(function () {
          // [0,1,2,3,4,5,6,7].map(i=> 22.5+45*i) 
          if( angle > 337.5 || angle <= 22.5 ) return 'rightBtn';     
          else if( angle > 292.5 && angle <= 337.5 ) return'downRightBtn';     
-         else if( angle > 247.5 && angle <= 292.5 ) return 'downBtn';   
+         else if( angle > 247.5 && angle <= 292.5 ) return dis > 300 ?  'downBtn2' : 'downBtn';   
          else if( angle > 202.5 && angle <= 247.5 ) return 'downLeftBtn';
          else if( angle > 157.5 && angle <= 202.5 ) return  'leftBtn';
          else if( angle > 112.5 && angle <= 157.5 ) return 'upLeftBtn';
          else  if( angle > 67.5 && angle <= 112.5 ) return   'upBtn';
          else return 'upRightBtn';
+         
          // if( angle > 45 && angle <= 135 ) return 'upBtn';
          // else if( angle > 135 && angle <= 225 ) return 'leftBtn';
          // else if( angle > 225 && angle <= 315 ) return 'downBtn';
@@ -773,7 +774,8 @@ $(function () {
         if(!btn) ext = {} ;
         else if( btn == 'upBtn' ) ext = { doDelete : 1} ;
         else if( btn == 'leftBtn' ) ext = { preEnter:1 , prefix : '## ' ,doEnter : 1} ;
-        else if( btn == 'downBtn' ) ext = { doEnter : dis >350 ? 2 : 1 } ;
+        else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
+        else if( btn == 'downBtn2' ) ext = { doEnter : 2 } ;
         else  if( btn == 'upLeftBtn' ) ext = { preEnter:1 , prefix : '- '} ;
         else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
         else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
@@ -787,7 +789,6 @@ $(function () {
         let btn = checkTouchMoveBtn( angle, dis );
         let ext =  transParams(btn, dis ) ;
         let volume , soundMp3 = 'res/done.mp3' ;   // right = 角度为0，逆时针方向旋转
-        if( btn == 'downBtn' && ext.doEnter == 2 ) btn = 'downBtn2'  ;
             
         if( lastBtn != btn ) {
             if( btn == 'upBtn' ) soundMp3 = 'res/upBtn.mp3' ;
