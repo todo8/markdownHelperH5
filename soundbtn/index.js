@@ -755,11 +755,11 @@ $(function () {
     function checkTouchMoveBtn(angle, dis) {
          if( dis == null || dis < 80 ) return ;
          // [0,1,2,3,4,5,6,7].map(i=> 22.5+45*i) 
-         if( angle > 337.5 || angle <= 22.5 ) return 'rightBtn';     
+         if( angle > 337.5 || angle <= 22.5 ) return dis > 220 ?  'rightBtn2' : 'rightBtn'; 
          else if( angle > 292.5 && angle <= 337.5 ) return'downRightBtn';     
          else if( angle > 247.5 && angle <= 292.5 ) return dis > 300 ?  'downBtn2' : 'downBtn';   
          else if( angle > 202.5 && angle <= 247.5 ) return 'downLeftBtn';
-         else if( angle > 157.5 && angle <= 202.5 ) return  'leftBtn';
+         else if( angle > 157.5 && angle <= 202.5 ) return dis > 220 ?  'leftBtn2' : 'leftBtn'; 
          else if( angle > 112.5 && angle <= 157.5 ) return 'upLeftBtn';
          else  if( angle > 67.5 && angle <= 112.5 ) return   'upBtn';
          else return 'upRightBtn';
@@ -774,13 +774,15 @@ $(function () {
         if(!btn) ext = {} ;
         else if( btn == 'upBtn' ) ext = { doDelete : 1} ;
         else if( btn == 'leftBtn' ) ext = { preEnter:1 , prefix : '## ' ,doEnter : 1} ;
+        else if( btn == 'leftBtn2' ) ext = { preEnter:1 , prefix : '# ' ,doEnter : 1} ;
         else if( btn == 'downBtn' ) ext = { doEnter : 1 } ;
         else if( btn == 'downBtn2' ) ext = { doEnter : 2 } ;
         else  if( btn == 'upLeftBtn' ) ext = { preEnter:1 , prefix : '- '} ;
-        else  if( btn == 'upRightBtn' ) ext = { wrapper : '**'} ;
+        else  if( btn == 'upRightBtn' ) ext = { preEnter:1 , prefix : '- [ ] '} ;
         else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
-        else  if( btn == 'downRightBtn' ) ext = { preEnter:1 , prefix : '---------\n' , doEnter : 1} ;
-        else ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
+        else  if( btn == 'downRightBtn' ) ext = ext = { wrapper : '**'} ; // { preEnter:1 , prefix : '---------\n' , doEnter : 1} ;
+        else  if( btn == 'upRightBtn' )  ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
+        else  if( btn == 'rightBtn2' )  ext = { preEnter:1 , prefix : '#### ' ,doEnter : 1 } ; // right
         return ext ;
     }
     let currSoundId , lastBtn = null ;
@@ -801,6 +803,8 @@ $(function () {
             if( btn == 'upRightBtn' ) soundMp3 = 'res/ding.mp3' ;
 
             if( btn == 'downBtn2') soundMp3 = 'res/enter2.mp3' , volume = 0.4 ; //2个回车的音效。
+            if( btn == 'leftBtn2') soundMp3 = 'res/enter2.mp3' , volume = 0.4 ; //2个回车的音效。
+            if( btn == 'rightBtn2') soundMp3 = 'res/enter2.mp3' , volume = 0.4 ; //2个回车的音效。
 
             btn && new Howl({ src: [soundMp3] ,volume: volume || 0.1 }).play();
             sendVibrate(50)
