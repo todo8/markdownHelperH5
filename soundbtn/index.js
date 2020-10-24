@@ -781,7 +781,7 @@ $(function () {
         else  if( btn == 'upRightBtn' ) ext = { preEnter:1 , prefix : '- [ ] '} ;
         else  if( btn == 'downLeftBtn' ) ext = { preEnter:1 , prefix : '> '} ;
         else  if( btn == 'downRightBtn' ) ext = ext = { wrapper : '**'} ; // { preEnter:1 , prefix : '---------\n' , doEnter : 1} ;
-        else  if( btn == 'upRightBtn' )  ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
+        else  if( btn == 'rightBtn' )  ext = { preEnter:1 , prefix : '### ' ,doEnter : 1 } ; // right
         else  if( btn == 'rightBtn2' )  ext = { preEnter:1 , prefix : '#### ' ,doEnter : 1 } ; // right
         return ext ;
     }
